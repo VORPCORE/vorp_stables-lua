@@ -88,9 +88,7 @@ RegisterNuiCallback("removeAllComps", function(data, callback)
     TriggerServerEvent(Events.onRemoveComps, data.rideId)
     for k, ride in pairs(Stable.rides) do
         if(ride.id == data.rideId) then
-            for k, v in pairs(ride.comps) do
-                Citizen.InvokeNative(0xC8A9481A01E63C28, RidePreviewRef, false)
-            end
+            Citizen.InvokeNative(0xC8A9481A01E63C28, RidePreviewRef, false)
             ride.comps = {}
             break
         end

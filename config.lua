@@ -1,6 +1,6 @@
 Config = {
     -- turn on if you need to hot restart the plugin
-    DevMode = false,
+    DevMode = true,
     Lang = Langs.En,
     StaticData = Data,
     MaxHorses = 3,
