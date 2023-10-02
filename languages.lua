@@ -11,6 +11,7 @@ Langs = {
     BuyFor = "Acheter pour {price} $",
     DollarBeforeOrAfterPrice = "{price} $",
     ModifyEquipment = "Modifier l'équipement",
+    RemoveEquipment = "Retirer l'équipement",
 
     MyRides = "Mes montures",
     Transfer = "Transférer",
@@ -257,6 +258,7 @@ Langs = {
     BuyFor = "Buy for ${price}",
     DollarBeforeOrAfterPrice = "$ {price}",
     ModifyEquipment = "Change horse equipment",
+    RemoveEquipment = "Remove horse equipment",
 
     MyRides = "My rides",
     Transfer = "Transfer",

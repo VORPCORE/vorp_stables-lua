@@ -81,6 +81,7 @@ function MyRidesMenu({ Data: { characterId, rides } }) {
           <>
             <span onClick={() => setRoute("/buycomps?" + ride.id)}>{Data.Lang.BuyEquipment}</span>
             <span onClick={() => setRoute("/changecomps?" + ride.id)}>{Data.Lang.ModifyEquipment}</span>
+            <span onClick={() =>  axios.post(`https://${GetParentResourceName()}/removeAllComps`, { rideId: ride.id }) }>{Data.Lang.RemoveEquipment}</span>
           </>
         }
         <span onClick={() => setRoute("/transfer?" + ride.id)}>{Data.Lang.Transfer}</span>

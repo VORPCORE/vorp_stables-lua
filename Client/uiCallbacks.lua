@@ -9,7 +9,7 @@ RegisterNuiCallback("buyRide", function(data, callback)
     TriggerEvent("vorpinputs:getInput", Config.Lang.Ok, Config.Lang.PlaceHolderRideName,
         function(rideName)
             if #rideName < 3 then
-                TriggerEvent("vorp:TipRight", "~e~" + GetConfig.Lang.TipNameTooShort, 3000);
+                TriggerEvent("vorp:TipRight", "~e~" .. Config.Lang.TipNameTooShort, 3000);
             else
                 TriggerServerEvent(Events.onBuyRide, rideName, data.rideModel, data.rideType, data.price);
             end
@@ -83,6 +83,20 @@ RegisterNuiCallback("viewComp", function(data, callback)
     currentlyPreviewedCompModel = data.modelHash
 end)
 
+RegisterNuiCallback("removeAllComps", function(data, callback)
+    print(data.rideId)
+    TriggerServerEvent(Events.onRemoveComps, data.rideId)
+    for k, ride in pairs(Stable.rides) do
+        if(ride.id == data.rideId) then
+            for k, v in pairs(ride.comps) do
+                Citizen.InvokeNative(0xC8A9481A01E63C28, RidePreviewRef, false)
+            end
+            ride.comps = {}
+            break
+        end
+    end
+end)
+
 RegisterNuiCallback("buyComp", function(data, callback)
     local currentRide
     for k, ride in pairs(Stable.rides) do
@@ -151,7 +165,7 @@ function LoadModel(hash)
     if IsModelValid(hash) then
         RequestModel(hash)
         while not HasModelLoaded(hash) do
-            Wait(100);
+            Citizen.Wait(100);
         end
         return true
     else
