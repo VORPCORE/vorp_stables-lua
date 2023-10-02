@@ -10,7 +10,7 @@ end)
 
 RegisterNetEvent(Events.loadStable, function(charid)
     local src = source
-    LoadStableContent(src, charid)
+    LoadStableContent(src, charid, true)
 end)
 
 RegisterNetEvent(Events.loadStableRuntime, function()
@@ -61,6 +61,7 @@ function LoadStableContent(src, charId, regInvs)
                     else
                         limit = Config.DefaultMaxWeight
                     end
+                    print("Registering inv for " .. ride.name)
                     VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], false)
                 end
             end
