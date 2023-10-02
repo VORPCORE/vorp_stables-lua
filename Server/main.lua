@@ -16,11 +16,11 @@ end)
 RegisterNetEvent(Events.loadStableRuntime, function()
     local src = source
     local id = VorpCore.getUser(src).getUsedCharacter.charIdentifier
-    LoadStableContent(src, id)
+    LoadStableContent(src, id, true)
 end)
 
 -- Everytime a DB action is made, this function gets called to sync data on the client with data in the DB
-function LoadStableContent(src, charId)
+function LoadStableContent(src, charId, regInvs)
     -- Retrieve owned rides, and rides transfered to this player
     db:execute(
         "SELECT * FROM stables WHERE `charidentifier`=? OR `status` LIKE '%\"transferTarget\":?,%' OR `status` LIKE '%\"transferTarget\":?}'",
@@ -30,6 +30,9 @@ function LoadStableContent(src, charId)
                     local comps
                     if (#compsResult == 0) then
                         comps = {}
+                        db:execute(
+                            "INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)",
+                            {charId, "[]", "steam:"})
                     else
                         comps = compsResult[1]["complements"]
                     end
@@ -50,14 +53,16 @@ function LoadStableContent(src, charId)
                     }
                     TriggerClientEvent(Events.onStableLoaded, src, out)
                 end)
-            for k, ride in pairs(result) do
-                local limit
-                if Config.CustomMaxWeight[ride.model] ~= nil then
-                    limit = Config.CustomMaxWeight[ride.model]
-                else
-                    limit = Config.DefaultMaxWeight
+            if regInvs ~= nil then
+                for k, ride in pairs(result) do
+                    local limit
+                    if Config.CustomMaxWeight[ride.model] ~= nil then
+                        limit = Config.CustomMaxWeight[ride.model]
+                    else
+                        limit = Config.DefaultMaxWeight
+                    end
+                    VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], false)
                 end
-                VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], false)
             end
         end)
 
@@ -77,11 +82,19 @@ RegisterNetEvent(Events.onBuyRide, function(rideName, rideModel, rideType, price
     end
 
     player.removeCurrency(0, price)
-    db:execute("INSERT INTO stables (`charidentifier`, `name`, `type`, `modelname`) VALUES (?, ?, ?,?)",
+    db:execute(
+        "INSERT INTO stables (`charidentifier`, `name`, `type`, `modelname`, `identifier`) VALUES (?, ?, ?, ?, 'steam:')",
         {id, rideName, rideType, rideModel}, function(result)
             if result.affectedRows > 0 then
                 TriggerClientEvent("vorp:TipRight", src,
-                    Config.Lang.TipRidePurchased:gsub("%{rideName}", rideName):gsub("%{price}", price), 4000)
+                Config.Lang.TipRidePurchased:gsub("%{rideName}", rideName):gsub("%{price}", price), 4000)
+                local limit
+                    if Config.CustomMaxWeight[rideModel] ~= nil then
+                        limit = Config.CustomMaxWeight[rideModel]
+                    else
+                        limit = Config.DefaultMaxWeight
+                    end
+                VorpInv.registerInventory(rideName, rideName, limit, true, Config.ShareInv[rideType], false)
                 LoadStableContent(src, id)
             end
         end)
@@ -150,6 +163,10 @@ RegisterNetEvent(Events.onBuyComp, function(compModel, compType, price, horseId,
         end
     end)
 
+end)
+
+RegisterNetEvent(Events.onRemoveComps, function(rideId) 
+    db:execute("UPDATE stables SET `gear` = '{}' WHERE `id` = ?", {rideId})
 end)
 
 RegisterNetEvent(Events.onDelete, function(rideId)

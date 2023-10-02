@@ -1,10 +1,14 @@
 Config = {
+    -- turn on if you need to hot restart the plugin
     DevMode = false,
     Lang = Langs.En,
     StaticData = Data,
     MaxHorses = 3,
     MaxCarts = 1,
     StableSlots = 3,
+
+    CallHorseKey = Keys.H,
+    CallCartKey = Keys.J,
 
     -- Unused
     -- JobRequired = false,
@@ -14,7 +18,7 @@ Config = {
     -- JobForHorseAndCarriagesDealer = "HorseAndCarriagesdealer",
 
     -- When a horse dies, make it unavailable for x seconds
-    SecondsToRespawn = 2400,
+    SecondsToRespawn = 120,
 
     -- The hard death mechanism will make a horse unavailable after it has died too many times
     -- Set false to disable or set true, then set overall health, and Check deathResasons.lua To
