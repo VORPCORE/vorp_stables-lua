@@ -69,7 +69,7 @@ Data = {
                         "0xD894BF28", "0xE1435081", "0xEA46E28C", "0xFF020F3A", 0.1},
             ["Long"] = {"0x235DBF1", "0x446A6F01", "0x5F0395A3", "0x5FE29755", "0x632F2B7", "0x6CB9310E", "0x838E5EB8",
                     "0x94F58186", "0x97D095F4", "0xA193A97A", "0xAA3FAC1A", "0xAFB7C24", "0xB881489D", "0xC8646863",
-                    "0xC9D16B31", "0xE0BC27A6", "0xFC74DF3B", 50.1}
+                    "0xC9D16B31", "0xE0BC27A6", "0xFC74DF3B", 0.1}
         },
         ["Selles"] = {
             ["McClelland Lumley"] = {"0x106961A8", "0x150D0DAA", "0x17153A45", "0x1C14443F", "0x1F7C4C5", "0x2E4668A3",
