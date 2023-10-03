@@ -24,6 +24,7 @@ function Ride:new(rideFromDB)
         isDefault = rideFromDB.isDefault,
         comps = json.decode(rideFromDB.gear),
         owner = rideFromDB.charidentifier
+        lth = rideFromDB.injured
     }
     setmetatable(ride, self)
     self.__index = self

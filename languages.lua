@@ -78,6 +78,7 @@ Langs = {
     TipRidePurchased = "Vous avez acheté {rideName} pour ${price}",
     TipOfferSent = "Votre offre a été enregistrée",
     TipHorseDead = "Votre cheval est à terre",
+    TipHorseNearDeath = "Votre cheval semble être à bout de forces",
     TipHorseDeadDefinitive = "Votre cheval a succombé à ses blessures",
     TipSuccessfulBuyComp = "Vous avez acheté {0} pour {1}",
 
@@ -333,6 +334,7 @@ Langs = {
     TipRidePurchased = "You have purchased {rideName} for ${price}",
     TipOfferSent = "Your offer has been registered",
     TipHorseDead = "Your horse is down",
+    TipHorseNearDeath = "Your horse looks really tired",
     TipHorseDeadDefinitive = "Your horse can't be reanimated",
     TipSuccessfulBuyComp = "You have bought a {0} for ${1}",
 

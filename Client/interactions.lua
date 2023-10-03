@@ -13,6 +13,11 @@ function getPositionBehindPlayer(playerX, playerY, playerZ, playerHeading, dist)
 end
 
 local function finishHorseSpawn(ride)
+
+    if ride.lth >= Config.LongTermHealth * 0.9 then
+        TriggerEvent("vorp:TipRight", Config.Lang.TipHorseNearDeath, 5000)
+    end
+
     Citizen.InvokeNative(0xADB3F206518799E8, ride.pedId, GetHashKey("PLAYER")) -- SetPedRelationship
     Citizen.InvokeNative(0xCC97B29285B1DC3B, ride.pedId, 1) -- SetAnimalMood (Natives DB says not implemented so idk)
 
