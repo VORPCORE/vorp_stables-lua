@@ -149,10 +149,10 @@ RegisterNetEvent(Events.onBuyComp, function(compModel, compType, price, horseId,
                 db:execute("UPDATE horse_complements SET `complements` = ? WHERE `charidentifier` = ?",
                     {json.encode(compsForDB), id}, function(result)
                         if result.affectedRows > 0 then
-                            TriggerClientEvent("vorp:TipRight", src, "Ajouté à l'inventaire de l'étable", 4000)
+                            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipAddedToStable, 4000)
                         else
                             TriggerClientEvent("vorp:TipRight", src,
-                                "Erreur lors de l'ajout à l'inventaire de l'étable", 4000)
+                                Config.Lang.TipErrorOnAdd, 4000)
                         end
                         LoadStableContent(src, id)
                     end)

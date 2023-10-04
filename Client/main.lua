@@ -92,7 +92,7 @@ function InitPlugin()
         content = Config
     }))
 
-    local str = "Écurie"
+    local str = Config.Lang.Stable
     PromptOpenVendor = PromptRegisterBegin()
     PromptSetControlAction(PromptOpenVendor, 0x760A9C6F)
     str = CreateVarString(10, "LITERAL_STRING", str)
