@@ -32,7 +32,7 @@ function LoadStableContent(src, charId, regInvs)
                         comps = {}
                         db:execute(
                             "INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)",
-                            {charId, "[]", "steam:"})
+                            {charId, "[]", tostring(charId)})
                     else
                         comps = compsResult[1]["complements"]
                     end
