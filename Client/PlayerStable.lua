@@ -23,7 +23,7 @@ function Ride:new(rideFromDB)
         type = rideFromDB.type,
         isDefault = rideFromDB.isDefault,
         comps = json.decode(rideFromDB.gear),
-        owner = rideFromDB.charidentifier
+        owner = rideFromDB.charidentifier,
         lth = rideFromDB.injured
     }
     setmetatable(ride, self)

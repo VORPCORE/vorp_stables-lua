@@ -9,6 +9,7 @@ Langs = {
     BuyA = "Acheter un",
     BuyA2 = "Acheter une",
     BuyFor = "Acheter pour {price} $",
+    Equip = "Équiper",
     DollarBeforeOrAfterPrice = "{price} $",
     ModifyEquipment = "Modifier l'équipement",
     RemoveEquipment = "Retirer l'équipement",
@@ -84,6 +85,7 @@ Langs = {
 
     TipErrorOnPurchase = "Une erreur est survenue lors de l'achat",
     TipErrorOnUpdate = "Une erreur est survenue lors du changement",
+    TipErrorOnAdd = "Erreur lors de l'ajout à l'inventaire de l'étable",
     
     A_C_Horse_AmericanPaint_Greyovero = "Suro gris",
     A_C_Horse_AmericanPaint_Overo = "Suro",
@@ -257,6 +259,7 @@ Langs = {
     BuyA = "Buy a",
     BuyA2 = "Buy a",
     BuyFor = "Buy for ${price}",
+    Equip = "Equip",
     DollarBeforeOrAfterPrice = "$ {price}",
     ModifyEquipment = "Change horse equipment",
     RemoveEquipment = "Remove horse equipment",
@@ -339,7 +342,8 @@ Langs = {
     TipSuccessfulBuyComp = "You have bought a {0} for ${1}",
 
     TipErrorOnPurchase = "An error occurred on purchase",
-    TipErrorOnUpdate = "An error occured when updating your default ride",
+    TipErrorOnUpdate = "An error occurred when updating your default ride",
+    TipErrorOnAdd = "Ann error occurred when updating inventory",
     
     A_C_Horse_AmericanPaint_Greyovero = "Greyovero",
     A_C_Horse_AmericanPaint_Overo = "Overo",

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { RouteCtx } from "./App";
+import { Data, RouteCtx } from "./App";
 import axios from "axios";
 
 function BuyCompsMenu({ Comps, buyable, horseId }) {
@@ -59,7 +59,7 @@ function BuyCompsMenu({ Comps, buyable, horseId }) {
                     price: buyable ? variants.at(-1) : 0,
                     horseId
                   })
-                }}>{buyable ? `Acheter pour $ ${variants.at(-1)}` : "Équiper"}</button>
+                }}>{buyable ? Data.Lang.BuyFor.replace("{price}", variants.at(-1)) : Data.Lang.Equip}</button>
               </span>
             )
         }

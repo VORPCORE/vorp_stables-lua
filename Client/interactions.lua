@@ -85,10 +85,8 @@ local function finishHorseSpawn(ride)
 end
 
 function CallRide(ride)
-    print(json.encode(ride))
     if ride == nil then
-        TriggerEvent("vorp:TipRight",
-            ride.type == "horse" and Config.Lang.TipNoDefaultHorse or Config.Lang.TipNoDefaultCart, 2000)
+        TriggerEvent("vorp:TipRight", Config.Lang.TipNoDefaultHorse, 2000)
         return
     end
 
