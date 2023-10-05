@@ -1,3 +1,8 @@
+<1.2>
+  -Bug fixes
+  -Added jobs support to match the C# version features
+  -Added options to ignore the inventory stack limit
+  -Added Feature and options to lead the horse when dismounted
 <1.1>
   -Fixed a bug where inventory would not register correctly for newly bought horses
   -Fixed a crash

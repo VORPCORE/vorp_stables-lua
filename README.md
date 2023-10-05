@@ -28,12 +28,14 @@ Keys aren't customizable yet, but might be in a future update.
 - **U** : Open ride inventory when in range (5)
 - **H** : Call default horse
 - **J** : Call default carriage
+- **SPACEBAR** : Your horse stops following you
 - **Ctrl + Spacebar** : Prance when mounted
 
 ### Focus Interactions
 Focus on horse to activate those (**right click**)
 - **B** : Brush horse (removes dirt)
 - **F** : Horse flees and despawns
+- **E** : Your horse now follows you
 
 ### UI
 - The UI is used with the mouse
