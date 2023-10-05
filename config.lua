@@ -11,12 +11,11 @@ Config = {
     CallCartKey = Keys.J,
     FollowKey = Keys.E,
 
-    -- Unused
-    -- JobRequired = false,
-    -- DisableBuyOptions = false, 
-    -- JobForHorseDealer = "Horsedealer",
-    -- JobForCarriagesDealer = "Carriagesdealer",
-    -- JobForHorseAndCarriagesDealer = "HorseAndCarriagesdealer",
+    DisableBuyOption = false,
+    JobRequired = false, 
+    JobForHorseDealer = "Horsedealer",
+    JobForCartDealer = "Carriagesdealer",
+    JobForAllDealer = "HorseAndCarriagesdealer",
 
     -- When a horse dies, make it unavailable for x seconds
     SecondsToRespawn = 120,

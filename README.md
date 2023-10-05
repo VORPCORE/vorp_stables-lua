@@ -75,6 +75,11 @@ The **job** related keys are unused for now, they might be in a future update.
 | MaxCarts | integer | The max number of carriages a player can have in their stable |
 | StableSlots | integer | The max number of carriages + horses a player can have in their stable |
 | SecondsToRespawn | integer | When a horse dies, players will need to wait for so much seconds to call it back |
+| DisableBuyOption | boolean | Set this to true so noone can buy a cart or horse whatsoever |
+| JobRequired | boolean | Set this to true to enforce job checking before buying a ride |
+| JobForHorseDealer | string | The name of the job required to buy horses (provided JobRequired is true) |
+| JobForCartDealer | string | The name of the job required to buy carriages (provided JobRequired is true) |
+| JobForAllDealer | string | The name of the job required to buy horses AND carriages (provided JobRequired is true) |
 | HardDeath | boolean | Activate the hard death mechanism or not |
 | LongTermHealth | integer | Upon dying, a horse loses LTH base on the values in `deathReason.lua`, when 0 is hit, the horse is deleted |
 | ShowTagsOnHorse | boolean | Floating names above horses |

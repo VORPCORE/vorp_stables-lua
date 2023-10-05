@@ -67,7 +67,7 @@ function LoadStableContent(src, charId, regInvs)
             end
         end)
 
-    db:execute("SELECT charidentifier, firstname, lastname FROM characters", function(result)
+    db:execute("SELECT charidentifier, firstname, lastname, job FROM characters", function(result)
         TriggerClientEvent("charsLoaded", src, result)
     end)
 end

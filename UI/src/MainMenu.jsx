@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react"
 import { Data, RouteCtx } from "./App"
 import axios from "axios";
 
-function MainMenu({transferedRides, rides}) {
+function MainMenu({ transferedRides, rides }) {
   const setRoute = useContext(RouteCtx);
   useEffect(() => {
     document.onkeydown = (e) => {
@@ -12,21 +12,40 @@ function MainMenu({transferedRides, rides}) {
       }
     }
   }, [])
+
+  const currentChar = Data.characters.find(c => c.charidentifier === Data.player.characterId);
+  console.log(currentChar.job, Data.JobForCartDealer,Data.JobForHorseDealer)
   return (
     <div className="menu-wrap">
       <h1>{Data.Lang.Stable}</h1>
       <menu>
-        <span onClick={() => setRoute("/buyhorse")}>{Data.Lang.BuyAHorse}</span>
-        <span onClick={() => setRoute("/buycart")}>{Data.Lang.BuyACart}</span>
         {
-          rides && rides.length 
-          ? <span onClick={() => setRoute("/myrides")}>{Data.Lang.MyRides}</span>
-          : null
+          !Data.DisableBuyOption &&
+          (
+            !Data.JobRequired ||
+            currentChar.job === Data.JobForHorseDealer ||
+            currentChar.job === Data.JobForAllDealer
+          ) &&
+          <span onClick={() => setRoute("/buyhorse")}>{Data.Lang.BuyAHorse}</span>
         }
         {
-          transferedRides && transferedRides?.length 
-          ? <span onClick={() => setRoute("/recieve")}>{Data.Lang.RidesAwaitingTransfer}</span>
-          : null
+          !Data.DisableBuyOption &&
+          (
+            !Data.JobRequired ||
+            currentChar.job === Data.JobForCartDealer ||
+            currentChar.job === Data.JobForAllDealer
+          ) &&
+          <span onClick={() => setRoute("/buycart")}>{Data.Lang.BuyACart}</span>
+        }
+        {
+          rides && rides.length
+            ? <span onClick={() => setRoute("/myrides")}>{Data.Lang.MyRides}</span>
+            : null
+        }
+        {
+          transferedRides && transferedRides?.length
+            ? <span onClick={() => setRoute("/recieve")}>{Data.Lang.RidesAwaitingTransfer}</span>
+            : null
         }
       </menu>
     </div>

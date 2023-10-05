@@ -236,7 +236,7 @@ function ActionsOnKeyPress()
     end
 
     if IsControlJustPressed(Config.FollowKey) then
-        if horseCurrentlyFollowingPlayer != nil then
+        if horseCurrentlyFollowingPlayer ~= nil then
             stopFollowing()
         else
             startFollowing()
