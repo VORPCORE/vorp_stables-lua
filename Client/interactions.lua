@@ -188,6 +188,16 @@ function BrushHorse(targetHorse)
     ClearPedWetness(targetHorse)
 end
 
+local function stopFollowing() 
+    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    horseCurrentlyFollowingPlayer = nil
+end
+
+local function startFollowing(target) 
+    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), target, true) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    horseCurrentlyFollowingPlayer = target
+end
+
 function ActionsOnKeyPress()
 
     -- On horse actions : https://github.com/femga/rdr3_discoveries/tree/master/tasks/TASK_HORSE_ACTION
@@ -213,8 +223,7 @@ function ActionsOnKeyPress()
     end
 
     if IsControlPressed(0, Keys.SPACEBAR) and horseCurrentlyFollowingPlayer ~= nil then
-        ClearPedTasks(horseCurrentlyFollowingPlayer, true, true)
-        horseCurrentlyFollowingPlayer = nil
+        stopFollowing()
     end
 
     -- Order flee
@@ -224,6 +233,14 @@ function ActionsOnKeyPress()
         Citizen.InvokeNative(0xFD45175A6DFD7CE9, aim, PlayerPedId(), 3, 0, -1.0, -1, 0);
         Citizen.Wait(10000)
         DeletePed(aim);
+    end
+
+    if IsControlJustPressed(Config.FollowKey) then
+        if horseCurrentlyFollowingPlayer != nil then
+            stopFollowing()
+        else
+            startFollowing()
+        end
     end
 
     if IsDisabledControlJustPressed(0, Keys.InteractHorseBrush) then
@@ -273,20 +290,11 @@ function ControlChecker()
     end
 end
 
-function HorseFollow() 
-    if horseCurrentlyFollowingPlayer == nil then
-        return
-    end
-    -- local x,y,z = GetEntityCoords(PlayerPedId())
-    -- Citizen.InvokeNative(0x5BC448CB78FA3E88, horseCurrentlyFollowingPlayer, x, y, z, 10.0, 0, 0, 0, 0) -- GoToCoordsAnyMeans
-end
-
 function Interactions()
     while true do
         Citizen.Wait(0)
         ActionsOnKeyPress()
         DeathManager()
-        HorseFollow()
         if Config.DevMode then
             --ControlChecker()
         end

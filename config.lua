@@ -9,6 +9,7 @@ Config = {
 
     CallHorseKey = Keys.H,
     CallCartKey = Keys.J,
+    FollowKey = Keys.E,
 
     -- Unused
     -- JobRequired = false,
