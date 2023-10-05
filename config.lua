@@ -38,6 +38,11 @@ Config = {
         horse = true,
         cart = true
     },
+    -- Should the horse or cart inventory ignore items stack limit
+    StackInvIgnore = {
+      horse = true,
+      cart = true
+    },
 
     DefaultMaxWeight = 125,
     CustomMaxWeight = {
