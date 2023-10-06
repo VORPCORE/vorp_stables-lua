@@ -9,13 +9,13 @@ Config = {
 
     CallHorseKey = Keys.H,
     CallCartKey = Keys.J,
+    FollowKey = Keys.E,
 
-    -- Unused
-    -- JobRequired = false,
-    -- DisableBuyOptions = false, 
-    -- JobForHorseDealer = "Horsedealer",
-    -- JobForCarriagesDealer = "Carriagesdealer",
-    -- JobForHorseAndCarriagesDealer = "HorseAndCarriagesdealer",
+    DisableBuyOption = false,
+    JobRequired = false, 
+    JobForHorseDealer = "Horsedealer",
+    JobForCartDealer = "Carriagesdealer",
+    JobForAllDealer = "HorseAndCarriagesdealer",
 
     -- When a horse dies, make it unavailable for x seconds
     SecondsToRespawn = 120,
@@ -37,6 +37,11 @@ Config = {
     ShareInv = {
         horse = true,
         cart = true
+    },
+    -- Should the horse or cart inventory ignore items stack limit
+    StackInvIgnore = {
+      horse = true,
+      cart = true
     },
 
     DefaultMaxWeight = 125,

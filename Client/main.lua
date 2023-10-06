@@ -36,7 +36,6 @@ function CheckNearStable()
             local GroupName = CreateVarString(10, "LITERAL_STRING", stableInRange.Name)
             PromptSetActiveGroupThisFrame(PromptGroup, GroupName)
             if PromptHasHoldModeCompleted(PromptOpenVendor) then
-
                 TriggerEvent("vorp:setInstancePlayer", true)
                 SendNUIMessage(json.encode({
                     type = "open",

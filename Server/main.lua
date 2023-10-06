@@ -62,12 +62,12 @@ function LoadStableContent(src, charId, regInvs)
                         limit = Config.DefaultMaxWeight
                     end
                     print("Registering inv for " .. ride.name)
-                    VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], false)
+                    VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], Config.StackInvIgnore[ride.type])
                 end
             end
         end)
 
-    db:execute("SELECT charidentifier, firstname, lastname FROM characters", function(result)
+    db:execute("SELECT charidentifier, firstname, lastname, job FROM characters", function(result)
         TriggerClientEvent("charsLoaded", src, result)
     end)
 end
