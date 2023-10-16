@@ -43,7 +43,7 @@ Config = {
       horse = true,
       cart = true
     },
-
+    
     DefaultMaxWeight = 125,
     CustomMaxWeight = {
         huntercart01 = 200,
@@ -91,11 +91,11 @@ Config = {
             A_C_Horse_AmericanStandardbred_PalominoDapple = 7,
             A_C_Horse_AmericanStandardbred_SilverTailBuckskin = 7,
 
-            A_C_Horse_Breton_GrulloDun = 7,
-            A_C_Horse_Breton_RedRoan = 7,
-            A_C_Horse_Breton_Sorrel = 7,
-            A_C_Horse_Breton_SteelGrey = 7,
-            A_C_Horse_Breton_SealBrown = 7,
+            A_C_Horse_Breton_GrulloDun = 77,
+            A_C_Horse_Breton_RedRoan = 77,
+            A_C_Horse_Breton_Sorrel = 77,
+            A_C_Horse_Breton_SteelGrey = 77,
+            A_C_Horse_Breton_SealBrown = 77,
 
             A_C_Horse_KentuckySaddle_Black = 8,
             A_C_Horse_KentuckySaddle_ButterMilkBuckskin_PC = 8,
