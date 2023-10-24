@@ -56,8 +56,8 @@ function LoadStableContent(src, charId, regInvs)
             if regInvs ~= nil then
                 for k, ride in pairs(result) do
                     local limit
-                    if Config.CustomMaxWeight[ride.model] ~= nil then
-                        limit = Config.CustomMaxWeight[ride.model]
+                    if Config.CustomMaxWeight[ride.modelname] then
+                        limit = Config.CustomMaxWeight[ride.modelname]
                     else
                         limit = Config.DefaultMaxWeight
                     end
