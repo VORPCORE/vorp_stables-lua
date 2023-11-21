@@ -13,7 +13,8 @@ function getPositionBehindPlayer(playerX, playerY, playerZ, playerHeading, dist)
 end
 
 local function finishHorseSpawn(ride)
-
+    local player = PlayerPedId()
+    local ped = PlayerId()
     if ride.lth >= Config.LongTermHealth * 0.9 then
         TriggerEvent("vorp:TipRight", Config.Lang.TipHorseNearDeath, 5000)
     end
@@ -33,13 +34,13 @@ local function finishHorseSpawn(ride)
     end
 
     Citizen.InvokeNative(0xFE26E4609B1C3772, ride.pedId, "HorseCompanion", true) -- DecorSetBool (wtf)
-    Citizen.InvokeNative(0xA691C10054275290, PlayerPedId(), ride.pedId, 0) -- No name (mount, player, dismountedTimeStamp)
-    Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
-    Citizen.InvokeNative(0xED1C764997A86D5A, PlayerPedId(), ride.pedId) -- No name (comment on Vespura : Only used in R* Script nb_stalking_hunter)
+    Citizen.InvokeNative(0xA691C10054275290, palyer), ride.pedId, 0) -- No name (mount, player, dismountedTimeStamp)
+    Citizen.InvokeNative(0x931B241409216C1F, player), ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    Citizen.InvokeNative(0xED1C764997A86D5A, player, ride.pedId) -- No name (comment on Vespura : Only used in R* Script nb_stalking_hunter)
     Citizen.InvokeNative(0xB8B6430EAD2D2437, ride.pedId, GetHashKey("PLAYER_HORSE")) -- SetPedPersonality
 
-    Citizen.InvokeNative(0xDF93973251FB2CA5, PlayerId(), true) -- SetPlayerMountStateActive
-
+    Citizen.InvokeNative(0xDF93973251FB2CA5, ped, true) -- SetPlayerMountStateActive
+    Citizen.InvokeNative(0xe6d4e435b56d5bd0, ped), ride.pedId)   -- SetPlayerOwnsMount enables tab for weapons and open satchel prompt as well horse name when closer
     Citizen.InvokeNative(0xAEB97D84CDF3C00B, ride.pedId, false) -- SetAnimalIsWild
 
     -- https://github.com/Halen84/RDR3-Native-Flags-And-Enums/tree/main/ePedScriptConfigFlags
