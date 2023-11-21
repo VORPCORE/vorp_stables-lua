@@ -64,7 +64,7 @@ local function finishHorseSpawn(ride)
         [440] = false,
         [561] = true
     }
-    for flag, val in ipairs(horseFlags) do
+    for flag, val in pairs(horseFlags) do
         Citizen.InvokeNative(0x1913FE4CBF41C463, ride.pedId, flag, val); -- SetPedConfigFlag (kind of sets defaultbehavior)
     end
 
