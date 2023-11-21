@@ -250,8 +250,7 @@ function ActionsOnKeyPress()
     -- Open inventories
     -- //TODO let anyone open if set in Config
     if CurrentHorse ~= nil and CurrentHorse.pedId and
-        #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentHorse.pedId)) <= 5.0 and
-        IsControlJustPressed(0, Keys.U) then
+        #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentHorse.pedId)) <= 5.0 and IsControlJustPressed(0, `INPUT_OPEN_SATCHEL_HORSE_MENU`) then
         TriggerServerEvent(Events.openInventory, CurrentHorse.name)
         print("Opening horse Inv")
     elseif CurrentCart ~= nil and CurrentCart.pedId and
