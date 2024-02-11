@@ -4,10 +4,10 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 
 author 'VORP @CrimsonFreak' 
 description 'A Stables script for vorp core framework'
-repository 'https://github.com/VORPCORE/vorp_stables-lua
+repository 'https://github.com/VORPCORE/vorp_stables-lua'
 
 
-shared_script {
+shared_scripts {
   "keys.lua",
   "events.lua",
   "data.lua",
@@ -16,7 +16,7 @@ shared_script {
   "config.lua",
 }
 client_script  'Client/*.lua'
-server_script  "Server/main.lua"
+server_script  'Server/main.lua'
 
 files {
   'UI/dist/assets/*.js',
