@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'rdr3'
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
-author 'VORP @CrimsonFreak' 
+author 'VORP @CrimsonFreak'
 description 'A Stables script for vorp core framework'
 repository 'https://github.com/VORPCORE/vorp_stables-lua'
 
@@ -15,8 +15,8 @@ shared_scripts {
   "deathReasons.lua",
   "config.lua",
 }
-client_script  'Client/*.lua'
-server_script  'Server/main.lua'
+client_scripts { '@vorp_core/client/dataview.lua', 'Client/*.lua' }
+server_script 'Server/main.lua'
 
 files {
   'UI/dist/assets/*.js',
