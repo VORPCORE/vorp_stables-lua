@@ -291,6 +291,7 @@ function ControlChecker()
 end
 
 function Interactions()
+    repeat Wait(5000) until LocalPlayer.state.IsInSession
     while true do
         Citizen.Wait(0)
         ActionsOnKeyPress()
@@ -301,4 +302,4 @@ function Interactions()
     end
 end
 
-Citizen.CreateThread(Interactions)
+CreateThread(Interactions)
