@@ -387,6 +387,7 @@ AddEventHandler('onResourceStop', function(resourceName)
 end)
 
 CreateThread(function()
+    repeat Wait(5000) until LocalPlayer.state.IsInSession
     while true do
         Wait(0)
         UpdateAnimalInfoThisFrame()
