@@ -33,9 +33,9 @@ function CheckNearStable()
         if not inDistance(pCoords, sCoords, radius) then
             stableInRange = nil
         elseif not IsNuiFocused() then
-            local GroupName = CreateVarString(10, "LITERAL_STRING", stableInRange.Name)
+            local GroupName = VarString(10, "LITERAL_STRING", stableInRange.Name)
             PromptSetActiveGroupThisFrame(PromptGroup, GroupName)
-            if PromptHasHoldModeCompleted(PromptOpenVendor) then
+            if UiPromptHasHoldModeCompleted(PromptOpenVendor) then
                 TriggerEvent("vorp:setInstancePlayer", true)
                 SendNUIMessage(json.encode({
                     type = "open",
@@ -55,7 +55,6 @@ function CheckNearStable()
 end
 
 function InitPlugin()
-
     local pedModelHash = GetHashKey("U_M_M_BwmStablehand_01")
 
     while not HasModelLoaded(pedModelHash) do
@@ -65,7 +64,6 @@ function InitPlugin()
 
     for index, stable in pairs(Config.Stables) do
         local sCoords = stable.EnterStable
-        local radius = sCoords[4]
         local x = sCoords[1]
         local y = sCoords[2]
         local z = sCoords[3]
@@ -74,8 +72,7 @@ function InitPlugin()
         Citizen.InvokeNative(0x74F74D3207ED525C, blip, stable.BlipIcon, 1)
         Citizen.InvokeNative(0x9CB1A1623062F402, blip, stable.Name)
 
-        local vendorPed = CreatePed(pedModelHash, stable.StableNPC[1], stable.StableNPC[2], stable.StableNPC[3],
-            stable.StableNPC[4], false, true, true, true)
+        local vendorPed = CreatePed(pedModelHash, stable.StableNPC[1], stable.StableNPC[2], stable.StableNPC[3], stable.StableNPC[4], false, true, true, true)
         Citizen.InvokeNative(0x283978A15512B2FE, vendorPed, true)
         SetEntityNoCollisionEntity(PlayerPedId(), vendorPed, false)
         SetEntityCanBeDamaged(vendorPed, false)
@@ -101,18 +98,17 @@ function InitPlugin()
     PromptSetHoldMode(PromptOpenVendor, true)
     PromptSetGroup(PromptOpenVendor, PromptGroup)
     PromptRegisterEnd(PromptOpenVendor)
-
 end
 
 function Main()
-    Citizen.Wait(2000)
+    Wait(2000)
     InitPlugin()
     while true do
         CheckNearStable()
     end
 end
 
-Citizen.CreateThread(Main)
+CreateThread(Main)
 
 RegisterNetEvent("vorp:SelectedCharacter", function(charId)
     TriggerServerEvent(Events.loadStable, charId)
@@ -152,7 +148,6 @@ AddEventHandler("onResourceStop", function(resourceName)
         TriggerEvent("vorp:setInstancePlayer", false);
         DestroyAllCams(true)
         if resourceName == GetCurrentResourceName() then
-
             for k, v in ipairs(vendorHandles) do
                 DeletePed(v)
             end
@@ -169,4 +164,3 @@ AddEventHandler("onResourceStart", function(resourceName)
         TriggerServerEvent(Events.loadStableRuntime)
     end
 end)
-

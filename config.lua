@@ -12,7 +12,7 @@ Config = {
     FollowKey = Keys.E,
 
     DisableBuyOption = false,
-    JobRequired = false, 
+    JobRequired = false,
     JobForHorseDealer = "Horsedealer",
     JobForCartDealer = "Carriagesdealer",
     JobForAllDealer = "HorseAndCarriagesdealer",
@@ -32,7 +32,7 @@ Config = {
     HorseSkillPullUpFailPercent = 20,
     DistanceToTeleport = 200,
 
-    -- Should everyone Access the inventories of the horses/carts 
+    -- Should everyone Access the inventories of the horses/carts
     -- //TODO To fully implement, let anyone open the inventory, not just the owner
     ShareInv = {
         horse = true,
@@ -40,10 +40,10 @@ Config = {
     },
     -- Should the horse or cart inventory ignore items stack limit
     StackInvIgnore = {
-      horse = true,
-      cart = true
+        horse = true,
+        cart = true
     },
-    
+
     DefaultMaxWeight = 125,
     CustomMaxWeight = {
         huntercart01 = 200,
@@ -63,11 +63,11 @@ Config = {
     },
 
     Stables = { --[[
-        To setup a custom inventory for the stable, there are 2 ways 
+        To setup a custom inventory for the stable, there are 2 ways
         first of all use horses = {} and carts = {} do define them. If not defined or left empty, the vendor
         will be selling everything.
 
-        You can then chose to define a custom price for this vendor, or take the price defined in data: 
+        You can then chose to define a custom price for this vendor, or take the price defined in data:
         horses = {
           "A_C_Horse_AmericanPaint_Overo", --the price will be the one from Data
           A_C_Horse_AmericanPaint_GreyOvero = 50 -- the price will be 50 only for that vendor
@@ -75,15 +75,16 @@ Config = {
 
         hf
       ]] {
-        Name = "Écurie de Valentine",
+        Name = "Stable of Valentine",
         BlipIcon = 1938782895,
-        EnterStable = {-365.87, 789.51, 116.17, 2.0},
-        StableNPC = {-365.15, 792.68, 115.18, 178.47},
-        SpawnHorse = {-366.07, 781.81, 115.14, 5.97},
-        CamHorse = {-367.9267, 783.0237, 117.7778, -36.42624, 0.0, -100.9786},
-        CamHorseGear = {-367.9267, 783.0237, 117.7778, -36.42624, 0.0, -100.9786},
-        SpawnCart = {-370.11, 786.99, 115.16, 274.18},
-        CamCart = {-363.5831, 792.1113, 118.0419, -16.35144, 0.0, 143.9759},
+        EnterStable = { -365.87, 789.51, 116.17, 2.0 },
+        StableNPC = { -365.15, 792.68, 115.18, 178.47 },
+        SpawnHorse = { -366.07, 781.81, 115.14, 5.97 },
+        CamHorse = { -367.9267, 783.0237, 117.7778, -36.42624, 0.0, -100.9786 },
+        CamHorseGear = { -367.9267, 783.0237, 117.7778, -36.42624, 0.0, -100.9786 },
+        SpawnCart = { -370.11, 786.99, 115.16, 274.18 },
+        CamCart = { -363.5831, 792.1113, 118.0419, -16.35144, 0.0, 143.9759 },
+        -- horses available and prices
         horses = {
             A_C_Horse_AmericanStandardbred_Black = 7,
             A_C_Horse_AmericanStandardbred_Buckskin = 7,
@@ -130,6 +131,7 @@ Config = {
             A_C_HorseMule_01 = 6,
 
         },
+        -- carts available and prices
         carts = {
             huntercart01 = 50,
             cart01 = 30,
@@ -143,52 +145,52 @@ Config = {
             supplywagon = 105
         }
     }, {
-        Name = "Écurie de Rhodes",
+        Name = "Stable of Rhodes",
         BlipIcon = 1938782895,
-        EnterStable = {1432.97, -1295.39, 76.82, 2.0},
-        StableNPC = {1434.64, -1294.89, 76.82, 105.08},
-        SpawnHorse = {1431.56, -1288.21, 76.82, 87.28},
-        CamHorse = {1431.58, -1292.27, 79.0, -16.0, 0.0, 6.0},
-        CamHorseGear = {1431.58, -1292.27, 79.0, -16.0, 0.0, 6.0},
-        SpawnCart = {1414.53, -1294.22, 77.95, 285.53},
-        CamCart = {1416.7, -1301.12, 81.0, -16.0, 0.0, 6.0},
+        EnterStable = { 1432.97, -1295.39, 76.82, 2.0 },
+        StableNPC = { 1434.64, -1294.89, 76.82, 105.08 },
+        SpawnHorse = { 1431.56, -1288.21, 76.82, 87.28 },
+        CamHorse = { 1431.58, -1292.27, 79.0, -16.0, 0.0, 6.0 },
+        CamHorseGear = { 1431.58, -1292.27, 79.0, -16.0, 0.0, 6.0 },
+        SpawnCart = { 1414.53, -1294.22, 77.95, 285.53 },
+        CamCart = { 1416.7, -1301.12, 81.0, -16.0, 0.0, 6.0 },
         horses = {
-          A_C_Horse_Ardennes_BayRoan = 7,
-          A_C_Horse_Ardennes_IronGreyRoan = 7,
-          A_C_Horse_Ardennes_StrawberryRoan = 7,
+            A_C_Horse_Ardennes_BayRoan = 7,
+            A_C_Horse_Ardennes_IronGreyRoan = 7,
+            A_C_Horse_Ardennes_StrawberryRoan = 7,
 
-          A_C_Horse_Belgian_BlondChestnut = 7,
-          A_C_Horse_Belgian_MealyChestnut = 7,
+            A_C_Horse_Belgian_BlondChestnut = 7,
+            A_C_Horse_Belgian_MealyChestnut = 7,
 
-          A_C_Horse_KentuckySaddle_Black = 8,
-          A_C_Horse_KentuckySaddle_ButterMilkBuckskin_PC = 8,
-          A_C_Horse_KentuckySaddle_ChestnutPinto = 8,
-          A_C_Horse_KentuckySaddle_Grey = 8,
-          A_C_Horse_KentuckySaddle_SilverBay = 8,
+            A_C_Horse_KentuckySaddle_Black = 8,
+            A_C_Horse_KentuckySaddle_ButterMilkBuckskin_PC = 8,
+            A_C_Horse_KentuckySaddle_ChestnutPinto = 8,
+            A_C_Horse_KentuckySaddle_Grey = 8,
+            A_C_Horse_KentuckySaddle_SilverBay = 8,
 
-          A_C_Horse_Kladruber_Grey = 40,
-          A_C_Horse_Kladruber_DappleRoseGrey = 40,
-          A_C_Horse_Kladruber_White = 40,
+            A_C_Horse_Kladruber_Grey = 40,
+            A_C_Horse_Kladruber_DappleRoseGrey = 40,
+            A_C_Horse_Kladruber_White = 40,
 
-          A_C_Horse_Morgan_Bay = 9,
-          A_C_Horse_Morgan_BayRoan = 9,
-          A_C_Horse_Morgan_Palomino = 9,
+            A_C_Horse_Morgan_Bay = 9,
+            A_C_Horse_Morgan_BayRoan = 9,
+            A_C_Horse_Morgan_Palomino = 9,
 
-          A_C_Horse_NorfolkRoadster_Black = 72,
-          A_C_Horse_NorfolkRoadster_DappledBuckskin = 72,
-          A_C_Horse_NorfolkRoadster_PiebaldRoan = 72,
+            A_C_Horse_NorfolkRoadster_Black = 72,
+            A_C_Horse_NorfolkRoadster_DappledBuckskin = 72,
+            A_C_Horse_NorfolkRoadster_PiebaldRoan = 72,
 
-          A_C_Horse_SuffolkPunch_RedChestnut = 20,
-          A_C_Horse_SuffolkPunch_Sorrel = 20,
+            A_C_Horse_SuffolkPunch_RedChestnut = 20,
+            A_C_Horse_SuffolkPunch_Sorrel = 20,
 
-          A_C_Horse_TennesseeWalker_DappleBay = 8,
-          A_C_Horse_TennesseeWalker_FlaxenRoan = 8,
-          A_C_Horse_TennesseeWalker_GoldPalomino_PC = 8,
+            A_C_Horse_TennesseeWalker_DappleBay = 8,
+            A_C_Horse_TennesseeWalker_FlaxenRoan = 8,
+            A_C_Horse_TennesseeWalker_GoldPalomino_PC = 8,
 
-          A_C_HorseMule_01 = 6,
-          A_C_Donkey_01 = 10,
+            A_C_HorseMule_01 = 6,
+            A_C_Donkey_01 = 10,
 
-      },
+        },
         carts = {
             huntercart01 = 50,
             cart03 = 40,
@@ -200,15 +202,15 @@ Config = {
             supplywagon = 105
         }
     }, {
-        Name = "Écurie Wapiti",
+        Name = "Stable of Wapiti",
         BlipIcon = 1938782895,
-        EnterStable = {482.06, 2215.17, 247.16, 2.0},
-        StableNPC = {480.43, 2213.17, 245.90, -44.71},
-        SpawnHorse = {485.49, 2209.0, 245.70, -27.54},
-        CamHorse = {483.39, 2211.93, 248.0, -19.14523, 0.0, 225.0},
-        CamHorseGear = {483.39, 2211.93, 247.58, -19.14523, 0.0, 225.0},
-        SpawnCart = {489.04, 2212.9, 246.95, -67.0},
-        CamCart = {483.36, 2219.16, 250.76, -25.0, 0.0, 233.68},
+        EnterStable = { 482.06, 2215.17, 247.16, 2.0 },
+        StableNPC = { 480.43, 2213.17, 245.90, -44.71 },
+        SpawnHorse = { 485.49, 2209.0, 245.70, -27.54 },
+        CamHorse = { 483.39, 2211.93, 248.0, -19.14523, 0.0, 225.0 },
+        CamHorseGear = { 483.39, 2211.93, 247.58, -19.14523, 0.0, 225.0 },
+        SpawnCart = { 489.04, 2212.9, 246.95, -67.0 },
+        CamCart = { 483.36, 2219.16, 250.76, -25.0, 0.0, 233.68 },
         horses = {
             A_C_Horse_AmericanPaint_Greyovero = 0,
             A_C_Horse_AmericanPaint_Overo = 0,
@@ -242,7 +244,8 @@ Config = {
             chuckwagon002x = 110,
             wagon02x = 100,
         }
-    } --[[
+    }
+        --[[
     {
       Name = "Saint Denis Stable",
       BlipIcon = 1938782895,
@@ -289,4 +292,3 @@ Config = {
     }
     ]] }
 }
-

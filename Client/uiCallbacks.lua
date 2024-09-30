@@ -1,4 +1,4 @@
-RidePreviewRef = nil
+RidePreviewRef = 0
 local instanceCam = nil
 
 RegisterNuiCallback("buyRide", function(data, callback)
@@ -27,7 +27,6 @@ RegisterNuiCallback("showRide", function(data, callback)
         Wait(500)
 
         if data.rideType == "horse" then
-
             local x, y, z, h = table.unpack(Config.Stables[CurrentVendorIndex].SpawnHorse)
             entityRef = CreatePed(rideHash, x, y, z, h, false, true, true, true)
             Citizen.InvokeNative(0x283978A15512B2FE, entityRef, true)
@@ -38,13 +37,10 @@ RegisterNuiCallback("showRide", function(data, callback)
             else
                 Citizen.InvokeNative(0xC8A9481A01E63C28, entityRef, 1);
             end
-
         elseif data.rideType == "cart" then
-
             local x, y, z, h = table.unpack(Config.Stables[CurrentVendorIndex].SpawnCart)
             entityRef = CreateVehicle(rideHash, x, y, z, h, false, true, true, true)
             Citizen.InvokeNative(0xAF35D0D2583051B0, entityRef, true)
-
         end
 
         SetEntityCanBeDamaged(horsePed, false)
@@ -70,10 +66,9 @@ RegisterNuiCallback("activateCam", function(data, callback)
 
 
     DestroyCam(instanceCam, true)
-    instanceCam = Citizen.InvokeNative(0x40C23491CE83708E,"DEFAULT_SCRIPTED_CAMERA", x, y, z, rx, ry, rz, fov, false, 0);
+    instanceCam = Citizen.InvokeNative(0x40C23491CE83708E, "DEFAULT_SCRIPTED_CAMERA", x, y, z, rx, ry, rz, fov, false, 0);
     SetCamActive(instanceCam, true);
     RenderScriptCams(true, true, 1000, true, true, 0);
-
 end)
 
 local currentlyPreviewedCompModel = nil
@@ -87,7 +82,7 @@ RegisterNuiCallback("removeAllComps", function(data, callback)
     print(data.rideId)
     TriggerServerEvent(Events.onRemoveComps, data.rideId)
     for k, ride in pairs(Stable.rides) do
-        if(ride.id == data.rideId) then
+        if (ride.id == data.rideId) then
             Citizen.InvokeNative(0xC8A9481A01E63C28, RidePreviewRef, false)
             ride.comps = {}
             break
@@ -98,7 +93,7 @@ end)
 RegisterNuiCallback("buyComp", function(data, callback)
     local currentRide
     for k, ride in pairs(Stable.rides) do
-        if(ride.id == data.horseId) then
+        if (ride.id == data.horseId) then
             currentRide = ride
             break
         end
@@ -118,12 +113,12 @@ RegisterNuiCallback("transfer", function(data, callback)
     TriggerServerEvent(Events.onTransfer, data.rideId, data.selectedChar, data.price, actPlayers)
 end)
 
-RegisterNuiCallback("transferRecieve", function(data, callback)local actPlayers = {}
+RegisterNuiCallback("transferRecieve", function(data, callback)
     local actPlayers = {}
     for i, v in ipairs(GetActivePlayers()) do
         actPlayers[i] = GetPlayerServerId(v)
     end
-    TriggerServerEvent(Events.onTransferRecieve, data.rideId, data.state, data.price, actPlayers)
+    TriggerServerEvent(Events.onTransferRecieve, data.rideId, data.selectedChar, data.state, data.price, actPlayers)
 end)
 
 RegisterNuiCallback("free", function(data, callback)
@@ -156,18 +151,17 @@ RegisterNuiCallback("exit", function(data, callback)
     FreezeEntityPosition(PlayerPedId(), false);
     TriggerEvent("vorp:setInstancePlayer", false);
     DestroyAllCams(true)
-    SetNuiFocus(false)
+    SetNuiFocus(false, false)
 end)
 
 function LoadModel(hash)
     if IsModelValid(hash) then
-        RequestModel(hash)
-        while not HasModelLoaded(hash) do
-            Citizen.Wait(100);
+        if not HasModelLoaded(hash) then
+            RequestModel(hash, false)
+            repeat Wait(0) until HasModelLoaded(hash)
         end
         return true
-    else
-        return false
     end
-
+    print("Model not valid: " .. hash)
+    return false
 end

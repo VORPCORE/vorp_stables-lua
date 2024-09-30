@@ -9,7 +9,7 @@ function getPositionBehindPlayer(playerX, playerY, playerZ, playerHeading, dist)
     local newX = playerX - dist * math.cos(headingRad)
     local newY = playerY - dist * math.sin(headingRad)
 
-    return {newX, newY, playerZ}
+    return { newX, newY, playerZ }
 end
 
 local function finishHorseSpawn(ride)
@@ -20,7 +20,7 @@ local function finishHorseSpawn(ride)
     end
 
     Citizen.InvokeNative(0xADB3F206518799E8, ride.pedId, GetHashKey("PLAYER")) -- SetPedRelationship
-    Citizen.InvokeNative(0xCC97B29285B1DC3B, ride.pedId, 1) -- SetAnimalMood (Natives DB says not implemented so idk)
+    Citizen.InvokeNative(0xCC97B29285B1DC3B, ride.pedId, 1)                    -- SetAnimalMood (Natives DB says not implemented so idk)
 
     for compType, comp in pairs(ride.comps) do
         ApplyShopItemToPed(ride.pedId, comp)
@@ -29,19 +29,19 @@ local function finishHorseSpawn(ride)
     if Config.ShowTagsOnHorses then
         local tagHorse = Citizen.InvokeNative(0xE961BF23EAB76B12, ride.pedId, ride.name) -- CreateMpGamerTagOnEntity
         -- Citizen.InvokeNative(0x53CB4B502E1C57EA, ride.pedId, ride.name, false, false, "", 0) --CreateFakeMpGamerTag
-        Citizen.InvokeNative(0x5F57522BC1EB9D9D, tagHorse, GetHashKey("PLAYER_HORSE")) -- SetMpGamerTagTopIcon
-        Citizen.InvokeNative(0xA0D7CE5F83259663, MPTagHorse, " ") -- SetMpGamerTagBigText
+        Citizen.InvokeNative(0x5F57522BC1EB9D9D, tagHorse, GetHashKey("PLAYER_HORSE"))   -- SetMpGamerTagTopIcon
+        Citizen.InvokeNative(0xA0D7CE5F83259663, MPTagHorse, " ")                        -- SetMpGamerTagBigText
     end
 
-    Citizen.InvokeNative(0xFE26E4609B1C3772, ride.pedId, "HorseCompanion", true) -- DecorSetBool (wtf)
-    Citizen.InvokeNative(0xA691C10054275290, player, ride.pedId, 0) -- No name (mount, player, dismountedTimeStamp)
-    Citizen.InvokeNative(0x931B241409216C1F, player, ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
-    Citizen.InvokeNative(0xED1C764997A86D5A, player, ride.pedId) -- No name (comment on Vespura : Only used in R* Script nb_stalking_hunter)
+    Citizen.InvokeNative(0xFE26E4609B1C3772, ride.pedId, "HorseCompanion", true)     -- DecorSetBool (wtf)
+    Citizen.InvokeNative(0xA691C10054275290, player, ride.pedId, 0)                  -- No name (mount, player, dismountedTimeStamp)
+    Citizen.InvokeNative(0x931B241409216C1F, player, ride.pedId, false)              -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
+    Citizen.InvokeNative(0xED1C764997A86D5A, player, ride.pedId)                     -- No name (comment on Vespura : Only used in R* Script nb_stalking_hunter)
     Citizen.InvokeNative(0xB8B6430EAD2D2437, ride.pedId, GetHashKey("PLAYER_HORSE")) -- SetPedPersonality
 
-    Citizen.InvokeNative(0xDF93973251FB2CA5, ped, true) -- SetPlayerMountStateActive
-    Citizen.InvokeNative(0xe6d4e435b56d5bd0, ped, ride.pedId)   -- SetPlayerOwnsMount enables tab for weapons and open satchel prompt as well horse name when closer
-    Citizen.InvokeNative(0xAEB97D84CDF3C00B, ride.pedId, false) -- SetAnimalIsWild
+    Citizen.InvokeNative(0xDF93973251FB2CA5, ped, true)                              -- SetPlayerMountStateActive
+    Citizen.InvokeNative(0xe6d4e435b56d5bd0, ped, ride.pedId)                        -- SetPlayerOwnsMount enables tab for weapons and open satchel prompt as well horse name when closer
+    Citizen.InvokeNative(0xAEB97D84CDF3C00B, ride.pedId, false)                      -- SetAnimalIsWild
 
     -- https://github.com/Halen84/RDR3-Native-Flags-And-Enums/tree/main/ePedScriptConfigFlags
     local horseFlags = {
@@ -69,16 +69,16 @@ local function finishHorseSpawn(ride)
         Citizen.InvokeNative(0x1913FE4CBF41C463, ride.pedId, flag, val); -- SetPedConfigFlag (kind of sets defaultbehavior)
     end
 
-    local horseTunings = {24, 25, 48}
+    local horseTunings = { 24, 25, 48 }
     for k, flag in ipairs(horseTunings) do
         Citizen.InvokeNative(0x1913FE4CBF41C463, ride.pedId, flag, false); -- SetHorseTuning (no info on Vespura, didn't check any further)
     end
 
-    Citizen.InvokeNative(0xA691C10054275290, ride.pedId, PlayerId(), 431); -- No name (mount, player, dismountedTimeStamp)
+    Citizen.InvokeNative(0xA691C10054275290, ride.pedId, PlayerId(), 431);                    -- No name (mount, player, dismountedTimeStamp)
 
-    Citizen.InvokeNative(0x6734F0A6A52C371C, PlayerId(), 431) -- No name (player, horseSlot)
-    Citizen.InvokeNative(0x024EC9B649111915, ride.pedId, true) -- No name, no desc (ped, p1)
-    Citizen.InvokeNative(0xEB8886E1065654CD, ride.pedId, 10, "ALL", 0) -- No name *Washing player's face/hands now* (ped, p1, p2, p3)
+    Citizen.InvokeNative(0x6734F0A6A52C371C, PlayerId(), 431)                                 -- No name (player, horseSlot)
+    Citizen.InvokeNative(0x024EC9B649111915, ride.pedId, true)                                -- No name, no desc (ped, p1)
+    Citizen.InvokeNative(0xEB8886E1065654CD, ride.pedId, 10, "ALL", 0)                        -- No name *Washing player's face/hands now* (ped, p1, p2, p3)
 
     Citizen.InvokeNative(0x6A071245EB0D1882, ride.pedId, PlayerPedId(), -1, 4.0, 100.0, 0, 0) -- GoToEntity
 
@@ -119,12 +119,12 @@ function CallRide(ride)
                 return
             end
 
-            Citizen.InvokeNative(0x283978A15512B2FE, ride.pedId, true) -- RandomOutfit(for initialization)
+            Citizen.InvokeNative(0x283978A15512B2FE, ride.pedId, true)                     -- RandomOutfit(for initialization)
             local blip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1230993421, ride.pedId) -- SetBlip
-            Citizen.InvokeNative(0x9CB1A1623062F402, blip, ride.name) -- SetBlipName
-            Citizen.InvokeNative(0x98EFA132A4117BE1, ride.pedId, ride.name) -- SetDebugName
-            Citizen.InvokeNative(0x4A48B6E03BABB4AC, ride.pedId, ride.name) -- SetPedPromptName
-            Citizen.InvokeNative(0xADB3F206518799E8, ride.pedId, GetHashKey("PLAYER")) -- SetPedRelationship
+            Citizen.InvokeNative(0x9CB1A1623062F402, blip, ride.name)                      -- SetBlipName
+            Citizen.InvokeNative(0x98EFA132A4117BE1, ride.pedId, ride.name)                -- SetDebugName
+            Citizen.InvokeNative(0x4A48B6E03BABB4AC, ride.pedId, ride.name)                -- SetPedPromptName
+            Citizen.InvokeNative(0xADB3F206518799E8, ride.pedId, GetHashKey("PLAYER"))     -- SetPedRelationship
 
             if ride.type == "horse" then
                 finishHorseSpawn(ride)
@@ -162,7 +162,6 @@ function CallRide(ride)
         ride.pedId = nil
         CallRide(ride)
     end
-
 end
 
 function IsMountSeatFree(entity)
@@ -189,18 +188,17 @@ function BrushHorse(targetHorse)
     ClearPedWetness(targetHorse)
 end
 
-local function stopFollowing() 
+local function stopFollowing()
     Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
     horseCurrentlyFollowingPlayer = nil
 end
 
-local function startFollowing(target) 
+local function startFollowing(target)
     Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), target, true) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
     horseCurrentlyFollowingPlayer = target
 end
 
 function ActionsOnKeyPress()
-
     -- On horse actions : https://github.com/femga/rdr3_discoveries/tree/master/tasks/TASK_HORSE_ACTION
     -- Citizen.InvokeNative(0xA09CFD29100F06C3,horse_ped_id, 2, 0, 0)  -- horse throw off rider and passenger
 
@@ -213,7 +211,6 @@ function ActionsOnKeyPress()
 
     -- Prancing horse (458)
     if IsControlPressed(0, Keys.HorseStop) and IsControlPressed(0, Keys.ContextA) then
-
         local rnd = math.random(100);
         if (rnd > Config.HorseSkillPullUpFailPercent) then
             Citizen.InvokeNative(0xA09CFD29100F06C3, GetMount(PlayerPedId()), 1, 0, 0)
