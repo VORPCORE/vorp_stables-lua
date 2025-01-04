@@ -25,15 +25,13 @@ function LoadStableContent(src, charId, regInvs)
                     local comps
                     if (#compsResult == 0) then
                         comps = {}
-                        db:execute(
-                            "INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)",
-                            { charId, "[]", tostring(charId) })
+                        db:execute("INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)", { charId, "[]", tostring(charId) })
                     else
                         comps = compsResult[1]["complements"]
                     end
                     local ownedRides = {}
                     local waitingRides = {}
-                    for k, v in ipairs(result) do
+                    for _, v in ipairs(result) do
                         if v.charidentifier == charId then
                             table.insert(ownedRides, 1, v)
                         else
@@ -49,7 +47,7 @@ function LoadStableContent(src, charId, regInvs)
                     TriggerClientEvent(Events.onStableLoaded, src, out)
                 end)
             if regInvs ~= nil then
-                for k, ride in pairs(result) do
+                for _, ride in pairs(result) do
                     local limit
                     if Config.CustomMaxWeight[ride.modelname] then
                         limit = Config.CustomMaxWeight[ride.modelname]
@@ -111,9 +109,9 @@ RegisterNetEvent(Events.onBuyComp, function(compModel, compType, price, horseId,
 
     -- When a comp is bought, check the comps the player already owns
     -- If not owned, add to table, else set alReadyHasComp to true to prevent a DB operation
-    for compTypeName, compModels in pairs(playerAvailableComps) do
-        for compModelName, comps in pairs(compModels) do
-            for k, comp in ipairs(comps) do
+    for _, compModels in pairs(playerAvailableComps) do
+        for _, comps in pairs(compModels) do
+            for _, comp in ipairs(comps) do
                 local compHash = tonumber(comp)
                 table.insert(compsForDB, 1, compHash)
                 if comp == compModel then
@@ -127,7 +125,7 @@ RegisterNetEvent(Events.onBuyComp, function(compModel, compType, price, horseId,
     -- This removes the equipement of the horse if the translation key has changed to avoid doubles
     -- //TODO replace with the current key rather than deleting for QOL (keep in mind that the players keep their stuff in horse_complements)
 
-    for k, v in pairs(horseComps) do
+    for k, _ in pairs(horseComps) do
         if Config.StaticData.Complements[k] == nil then
             horseComps[k] = nil
         end
@@ -136,20 +134,18 @@ RegisterNetEvent(Events.onBuyComp, function(compModel, compType, price, horseId,
     db:execute("UPDATE stables SET `gear` = ? WHERE `id` = ?", { json.encode(horseComps), horseId }, function(result)
         if result.affectedRows > 0 then
             player.removeCurrency(0, price)
-            TriggerClientEvent("vorp:TipRight", src,
-                Config.Lang.TipSuccessfulBuyComp:gsub("%{0}", compType):gsub("%{1}", price), 4000)
+
+            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipSuccessfulBuyComp:gsub("%{0}", compType):gsub("%{1}", price), 4000)
             if not alreadyHasComp then
                 table.insert(compsForDB, 1, compModel)
-                db:execute("UPDATE horse_complements SET `complements` = ? WHERE `charidentifier` = ?",
-                    { json.encode(compsForDB), id }, function(result)
-                        if result.affectedRows > 0 then
-                            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipAddedToStable, 4000)
-                        else
-                            TriggerClientEvent("vorp:TipRight", src,
-                                Config.Lang.TipErrorOnAdd, 4000)
-                        end
-                        LoadStableContent(src, id)
-                    end)
+                db:execute("UPDATE horse_complements SET `complements` = ? WHERE `charidentifier` = ?", { json.encode(compsForDB), id }, function(result_)
+                    if result_.affectedRows > 0 then
+                        TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipAddedToStable, 4000)
+                    else
+                        TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipErrorOnAdd, 4000)
+                    end
+                    LoadStableContent(src, id)
+                end)
             else
                 LoadStableContent(src, id)
             end
@@ -179,7 +175,7 @@ RegisterNetEvent(Events.onTransfer, function(rideId, targetChar, price, activePl
     local id = player.charIdentifier
     local targetSource = nil
     -- Check if recieving player is connected so their stable content gets refreshed
-    for k, v in ipairs(activePlayers) do
+    for _, v in ipairs(activePlayers) do
         local u = VorpCore.getUser(v)
         if u ~= nil then
             local p = u.getUsedCharacter
@@ -211,7 +207,7 @@ RegisterNetEvent(Events.onTransferRecieve, function(rideId, targetChar, accepted
     local targetSource = nil
     price = tonumber(price)
 
-    for k, v in ipairs(activePlayers) do
+    for _, v in ipairs(activePlayers) do
         local u = VorpCore.getUser(v)
         if u then
             local p = u.getUsedCharacter
@@ -224,11 +220,10 @@ RegisterNetEvent(Events.onTransferRecieve, function(rideId, targetChar, accepted
     end
 
     if not accepted then
-        db:execute("UPDATE stables SET status = NULL WHERE `id` = ?", { rideId },
-            function()
-                TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferDeclined, 4000)
-                LoadStableContent(src, id)
-            end)
+        db:execute("UPDATE stables SET status = NULL WHERE `id` = ?", { rideId }, function()
+            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferDeclined, 4000)
+            LoadStableContent(src, id)
+        end)
     elseif player.money >= price then
         db:execute("UPDATE stables SET status = NULL, charidentifier = ? WHERE `id` = ?", { id, rideId }, function()
             TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferAccepted:gsub("%{price}", price), 4000)
@@ -255,7 +250,7 @@ RegisterNetEvent(Events.setDefault, function(newRide, prevRide)
     local src = source
     local player = VorpCore.getUser(src).getUsedCharacter
     local id = player.charIdentifier
-    db:execute("UPDATE stables SET `isDefault` = 1 WHERE `id` = ?", { newRide }, function(updated, b)
+    db:execute("UPDATE stables SET `isDefault` = 1 WHERE `id` = ?", { newRide }, function(updated)
         if updated.affectedRows > 0 and prevRide ~= nil then
             db:execute("UPDATE stables SET `isDefault` = 0 WHERE `id` = ?", { prevRide }, function(secondUpdate)
                 if secondUpdate.affectedRows > 0 then

@@ -22,7 +22,7 @@ local function finishHorseSpawn(ride)
     Citizen.InvokeNative(0xADB3F206518799E8, ride.pedId, GetHashKey("PLAYER")) -- SetPedRelationship
     Citizen.InvokeNative(0xCC97B29285B1DC3B, ride.pedId, 1)                    -- SetAnimalMood (Natives DB says not implemented so idk)
 
-    for compType, comp in pairs(ride.comps) do
+    for _, comp in pairs(ride.comps) do
         ApplyShopItemToPed(ride.pedId, comp)
     end
 
@@ -30,7 +30,7 @@ local function finishHorseSpawn(ride)
         local tagHorse = Citizen.InvokeNative(0xE961BF23EAB76B12, ride.pedId, ride.name) -- CreateMpGamerTagOnEntity
         -- Citizen.InvokeNative(0x53CB4B502E1C57EA, ride.pedId, ride.name, false, false, "", 0) --CreateFakeMpGamerTag
         Citizen.InvokeNative(0x5F57522BC1EB9D9D, tagHorse, GetHashKey("PLAYER_HORSE"))   -- SetMpGamerTagTopIcon
-        Citizen.InvokeNative(0xA0D7CE5F83259663, MPTagHorse, " ")                        -- SetMpGamerTagBigText
+        Citizen.InvokeNative(0xA0D7CE5F83259663, tagHorse, " ")                          -- SetMpGamerTagBigText
     end
 
     Citizen.InvokeNative(0xFE26E4609B1C3772, ride.pedId, "HorseCompanion", true)     -- DecorSetBool (wtf)
@@ -70,7 +70,7 @@ local function finishHorseSpawn(ride)
     end
 
     local horseTunings = { 24, 25, 48 }
-    for k, flag in ipairs(horseTunings) do
+    for _, flag in ipairs(horseTunings) do
         Citizen.InvokeNative(0x1913FE4CBF41C463, ride.pedId, flag, false); -- SetHorseTuning (no info on Vespura, didn't check any further)
     end
 
@@ -101,9 +101,8 @@ function CallRide(ride)
     if ride.pedId == nil or not DoesEntityExist(ride.pedId) then
         Citizen.CreateThread(function()
             LoadModel(ride.model)
-            local spawnX, spawnY, spawnZ = table.unpack(getPositionBehindPlayer(x, y, z,
-                GetEntityHeading(PlayerPedId()), 10))
-            local retVal, spawn, spawn2 = GetClosestRoad(spawnX, spawnY, spawnZ, 0.0, 25, true);
+            local spawnX, spawnY, spawnZ = table.unpack(getPositionBehindPlayer(x, y, z, GetEntityHeading(PlayerPedId()), 10))
+            local _, spawn, _ = GetClosestRoad(spawnX, spawnY, spawnZ, 0.0, 25, true);
             -- Check if the road is not too far away, else spawn at ped
             local distToSpawn = #(spawn - vector3(x, y, z))
             if distToSpawn > 50 then
@@ -179,8 +178,7 @@ function AreVehicleSeatsFree(entity)
 end
 
 function BrushHorse(targetHorse)
-    Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), targetHorse, GetHashKey("Interaction_Brush"),
-        GetHashKey("p_brushHorse02x"), 1)
+    Citizen.InvokeNative(0xCD181A959CFDD7F4, PlayerPedId(), targetHorse, GetHashKey("Interaction_Brush"), GetHashKey("p_brushHorse02x"), 1)
     Citizen.Wait(5000)
     ClearPedEnvDirt(targetHorse)
     ClearPedBloodDamage(targetHorse)
@@ -225,7 +223,7 @@ function ActionsOnKeyPress()
     end
 
     -- Order flee
-    local retval, aim = GetEntityPlayerIsFreeAimingAt(PlayerId())
+    local _, aim = GetEntityPlayerIsFreeAimingAt(PlayerId())
 
     if IsControlJustPressed(0, Keys.HorseCommandFlee) then
         Citizen.InvokeNative(0xFD45175A6DFD7CE9, aim, PlayerPedId(), 3, 0, -1.0, -1, 0);
@@ -233,7 +231,7 @@ function ActionsOnKeyPress()
         DeletePed(aim);
     end
 
-    if IsControlJustPressed(Config.FollowKey) then
+    if IsControlJustPressed(0, Config.FollowKey) then
         if horseCurrentlyFollowingPlayer ~= nil then
             stopFollowing()
         else
@@ -246,15 +244,11 @@ function ActionsOnKeyPress()
     end
     -- Open inventories
     -- //TODO let anyone open if set in Config
-    if CurrentHorse ~= nil and CurrentHorse.pedId and
-        #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentHorse.pedId)) <= 5.0 and IsControlJustPressed(0, `INPUT_OPEN_SATCHEL_HORSE_MENU`) then
+    if CurrentHorse ~= nil and CurrentHorse.pedId and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentHorse.pedId)) <= 5.0 and IsControlJustPressed(0, `INPUT_OPEN_SATCHEL_HORSE_MENU`) then
         TriggerServerEvent(Events.openInventory, CurrentHorse.name)
-        print("Opening horse Inv")
-    elseif CurrentCart ~= nil and CurrentCart.pedId and
-        #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentCart.pedId)) <= 5.0 and
+    elseif CurrentCart ~= nil and CurrentCart.pedId and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentCart.pedId)) <= 5.0 and
         IsControlJustPressed(0, Keys.U) then
         TriggerServerEvent(Events.openInventory, CurrentCart.name)
-        print("Opening cart Inv")
     end
 end
 
@@ -276,26 +270,12 @@ function DeathManager()
     end
 end
 
-function ControlChecker()
-    -- Dev function to print key names on press
-    for k, v in pairs(Keys) do
-        if IsControlJustPressed(0, v) then
-            print("Control 0 pressed : " .. k)
-        elseif IsDisabledControlJustPressed(0, v) then
-            print("Disabled Control pressed : " .. k)
-        end
-    end
-end
-
 function Interactions()
     repeat Wait(5000) until LocalPlayer.state.IsInSession
     while true do
         Citizen.Wait(0)
         ActionsOnKeyPress()
         DeathManager()
-        if Config.DevMode then
-            --ControlChecker()
-        end
     end
 end
 
