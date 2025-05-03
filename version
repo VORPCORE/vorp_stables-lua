@@ -1,3 +1,6 @@
+<1.3>
+- secure events and transactions
+- fixed mising parameters
 <1.2>
   -Bug fixes
   -Added jobs support to match the C# version features

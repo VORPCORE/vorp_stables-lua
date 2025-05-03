@@ -34,16 +34,16 @@ function CheckNearStable()
             stableInRange = nil
         elseif not IsNuiFocused() then
             local GroupName = VarString(10, "LITERAL_STRING", stableInRange.Name)
-            PromptSetActiveGroupThisFrame(PromptGroup, GroupName)
+            UiPromptSetActiveGroupThisFrame(PromptGroup, GroupName)
             if UiPromptHasHoldModeCompleted(PromptOpenVendor) then
                 TriggerEvent("vorp:setInstancePlayer", true)
-                SendNUIMessage(json.encode({
+                SendNUIMessage({
                     type = "open",
                     content = {
                         player = Stable,
-                        current = stableInRange
+                        current = stableInRange,
                     }
-                }));
+                });
 
                 SetNuiFocus(true, true)
             end
@@ -83,10 +83,10 @@ function InitPlugin()
 
     SetModelAsNoLongerNeeded(pedModelHash)
 
-    SendNUIMessage(json.encode({
+    SendNUIMessage({
         type = "registerConfig",
         content = Config
-    }))
+    })
 
     local str = Config.Lang.Stable
     PromptOpenVendor = PromptRegisterBegin()
@@ -116,22 +116,23 @@ end)
 
 RegisterNetEvent(Events.onStableLoaded, function(result)
     Stable = PlayerStable:new(result.rides, result.charId, result.availableComps, result.transferedRides)
-    SendNUIMessage(json.encode({
+    SendNUIMessage({
         type = "refresh",
         content = {
             player = Stable,
             current = stableInRange
         }
-    }))
+    })
 end)
 
 RegisterNetEvent("charsLoaded", function(allChars)
     Data.Characters = allChars
-    local message = json.encode({
+    local message = {
         type = "refreshChars",
         content = allChars
-    })
-    SendNUIMessage(message)
+    }
+
+    SendNUIMessage({ message })
 end)
 
 AddEventHandler("onResourceStop", function(resourceName)

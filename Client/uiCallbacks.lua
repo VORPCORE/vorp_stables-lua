@@ -6,14 +6,13 @@ RegisterNuiCallback("buyRide", function(data, callback)
         return TriggerEvent("vorp:TipRight", Config.Lang.TipStableFull, 4000);
     end
 
-    TriggerEvent("vorpinputs:getInput", Config.Lang.Ok, Config.Lang.PlaceHolderRideName,
-        function(rideName)
-            if #rideName < 3 then
-                TriggerEvent("vorp:TipRight", "~e~" .. Config.Lang.TipNameTooShort, 3000);
-            else
-                TriggerServerEvent(Events.onBuyRide, rideName, data.rideModel, data.rideType, data.price);
-            end
-        end)
+    TriggerEvent("vorpinputs:getInput", Config.Lang.Ok, Config.Lang.PlaceHolderRideName, function(rideName)
+        if #rideName < 3 then
+            TriggerEvent("vorp:TipRight", "~e~" .. Config.Lang.TipNameTooShort, 3000);
+        else
+            TriggerServerEvent(Events.onBuyRide, rideName, data.rideModel, data.rideType);
+        end
+    end)
 end)
 
 RegisterNuiCallback("showRide", function(data, callback)
@@ -31,7 +30,7 @@ RegisterNuiCallback("showRide", function(data, callback)
             entityRef = CreatePed(rideHash, x, y, z, h, false, true, true, true)
             Citizen.InvokeNative(0x283978A15512B2FE, entityRef, true)
             if data.rideComps ~= nil then
-                for compType, comp in pairs(data.rideComps) do
+                for _, comp in pairs(data.rideComps) do
                     ApplyShopItemToPed(entityRef, comp)
                 end
             else
@@ -43,10 +42,11 @@ RegisterNuiCallback("showRide", function(data, callback)
             Citizen.InvokeNative(0xAF35D0D2583051B0, entityRef, true)
         end
 
+        local horsePed = entityRef
         SetEntityCanBeDamaged(horsePed, false)
         SetEntityInvincible(horsePed, true)
         FreezeEntityPosition(horsePed, true)
-        SetModelAsNoLongerNeeded(hashPed)
+        SetModelAsNoLongerNeeded(rideHash)
 
         RidePreviewRef = entityRef
     end)
@@ -118,7 +118,7 @@ RegisterNuiCallback("transferRecieve", function(data, callback)
     for i, v in ipairs(GetActivePlayers()) do
         actPlayers[i] = GetPlayerServerId(v)
     end
-    TriggerServerEvent(Events.onTransferRecieve, data.rideId, data.selectedChar, data.state, data.price, actPlayers)
+    TriggerServerEvent(Events.onTransferRecieve, data.rideId, data.selectedChar, data.state, CurrentVendorIndex, actPlayers)
 end)
 
 RegisterNuiCallback("free", function(data, callback)

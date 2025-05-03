@@ -18,58 +18,71 @@ end)
 -- Everytime a DB action is made, this function gets called to sync data on the client with data in the DB
 function LoadStableContent(src, charId, regInvs)
     -- Retrieve owned rides, and rides transfered to this player
-    db:execute("SELECT * FROM stables WHERE `charidentifier`=? OR `status` LIKE '%\"transferTarget\":?,%' OR `status` LIKE '%\"transferTarget\":?}'", { charId, charId, charId },
-        function(result)
-            db:execute("SELECT `complements` FROM horse_complements WHERE `charidentifier`=?", { charId },
-                function(compsResult)
-                    local comps
-                    if (#compsResult == 0) then
-                        comps = {}
-                        db:execute("INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)", { charId, "[]", tostring(charId) })
-                    else
-                        comps = compsResult[1]["complements"]
-                    end
-                    local ownedRides = {}
-                    local waitingRides = {}
-                    for _, v in ipairs(result) do
-                        if v.charidentifier == charId then
-                            table.insert(ownedRides, 1, v)
-                        else
-                            table.insert(waitingRides, 1, v)
-                        end
-                    end
-                    local out = {
-                        rides = ownedRides,
-                        transferedRides = waitingRides,
-                        availableComps = comps,
-                        charId = charId
-                    }
-                    TriggerClientEvent(Events.onStableLoaded, src, out)
-                end)
-            if regInvs ~= nil then
-                for _, ride in pairs(result) do
-                    local limit
-                    if Config.CustomMaxWeight[ride.modelname] then
-                        limit = Config.CustomMaxWeight[ride.modelname]
-                    else
-                        limit = Config.DefaultMaxWeight
-                    end
-                    print("Registering inv for " .. ride.name)
-                    VorpInv.registerInventory(ride.name, ride.name, limit, true, Config.ShareInv[ride.type], Config.StackInvIgnore[ride.type])
+    db:execute("SELECT * FROM stables WHERE `charidentifier`=? OR `status` LIKE '%\"transferTarget\":?,%' OR `status` LIKE '%\"transferTarget\":?}'", { charId, charId, charId }, function(result)
+        db:execute("SELECT `complements` FROM horse_complements WHERE `charidentifier`=?", { charId }, function(compsResult)
+            local comps
+            if (#compsResult == 0) then
+                comps = {}
+                db:execute("INSERT INTO  horse_complements (`charidentifier`, `complements`, `identifier`) VALUES (?,?,?)", { charId, "[]", tostring(charId) })
+            else
+                comps = compsResult[1]["complements"]
+            end
+            local ownedRides = {}
+            local waitingRides = {}
+            for _, v in ipairs(result) do
+                if v.charidentifier == charId then
+                    table.insert(ownedRides, 1, v)
+                else
+                    table.insert(waitingRides, 1, v)
                 end
             end
+            local out = {
+                rides = ownedRides,
+                transferedRides = waitingRides,
+                availableComps = comps,
+                charId = charId
+            }
+            TriggerClientEvent(Events.onStableLoaded, src, out)
         end)
+
+        if regInvs ~= nil then
+            for _, ride in pairs(result) do
+                local limit
+                if Config.CustomMaxWeight[ride.modelname] then
+                    limit = Config.CustomMaxWeight[ride.modelname]
+                else
+                    limit = Config.DefaultMaxWeight
+                end
+                local id = ("%s_%s"):format(ride.modelname, charId)
+                VorpInv.registerInventory(id, ride.name, limit, true, Config.ShareInv[ride.type], Config.StackInvIgnore[ride.type])
+            end
+        end
+    end)
 
     db:execute("SELECT charidentifier, firstname, lastname, job FROM characters", function(result)
         TriggerClientEvent("charsLoaded", src, result)
     end)
 end
 
-RegisterNetEvent(Events.onBuyRide, function(rideName, rideModel, rideType, price)
-    price = tonumber(price)
+RegisterNetEvent(Events.onBuyRide, function(rideName, rideModel, rideType)
     local src = source
     local player = VorpCore.getUser(src).getUsedCharacter
     local id = player.charIdentifier
+    local price = 0
+
+    if rideType == "horse" then
+        local value = Data.Horses[rideModel]
+        if not value then
+            return print("rideModel not found in Data.Horses")
+        end
+        price = value
+    elseif rideType == "cart" then
+        local value = Data.Carts[rideModel]
+        if not value then
+            return print("rideModel not found in Data.Carts")
+        end
+        price = value
+    end
 
     if price > player.money then
         return TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipCantAfford, 4000)
@@ -87,7 +100,8 @@ RegisterNetEvent(Events.onBuyRide, function(rideName, rideModel, rideType, price
                 else
                     limit = Config.DefaultMaxWeight
                 end
-                VorpInv.registerInventory(rideName, rideName, limit, true, Config.ShareInv[rideType], false)
+                id = ("%s_%s"):format(rideModel, id)
+                VorpInv.registerInventory(id, rideName, limit, true, Config.ShareInv[rideType], false)
                 LoadStableContent(src, id)
             end
         end)
@@ -163,9 +177,17 @@ RegisterNetEvent(Events.onDelete, function(rideId)
     local src = source
     local player = VorpCore.getUser(src).getUsedCharacter
     local id = player.charIdentifier
-    db:execute("DELETE FROM stables WHERE `id` = ?", { rideId }, function()
-        TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipHorseFreed, 4000)
-        LoadStableContent(src, id)
+
+    -- is player owner of this
+    db:execute("SELECT charidentifier FROM stables WHERE `id` = ?", { rideId }, function(result)
+        if result[1] then
+            if result[1].charidentifier == id then
+                db:execute("DELETE FROM stables WHERE `id` = ?", { rideId }, function()
+                    TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipHorseFreed, 4000)
+                    LoadStableContent(src, id)
+                end)
+            end
+        end
     end)
 end)
 
@@ -200,12 +222,11 @@ RegisterNetEvent(Events.onTransfer, function(rideId, targetChar, price, activePl
     end)
 end)
 
-RegisterNetEvent(Events.onTransferRecieve, function(rideId, targetChar, accepted, price, activePlayers)
+RegisterNetEvent(Events.onTransferRecieve, function(rideId, targetChar, accepted, index, activePlayers)
     local src = source
     local player = VorpCore.getUser(src).getUsedCharacter -- seller ?
     local id = player.charIdentifier
     local targetSource = nil
-    price = tonumber(price)
 
     for _, v in ipairs(activePlayers) do
         local u = VorpCore.getUser(v)
@@ -219,31 +240,65 @@ RegisterNetEvent(Events.onTransferRecieve, function(rideId, targetChar, accepted
         end
     end
 
-    if not accepted then
-        db:execute("UPDATE stables SET status = NULL WHERE `id` = ?", { rideId }, function()
-            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferDeclined, 4000)
-            LoadStableContent(src, id)
-        end)
-    elseif player.money >= price then
-        db:execute("UPDATE stables SET status = NULL, charidentifier = ? WHERE `id` = ?", { id, rideId }, function()
-            TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferAccepted:gsub("%{price}", price), 4000)
-            LoadStableContent(src, id)
-            player.removeCurrency(0, price)
-            if targetSource then
-                local tPlayer = VorpCore.getUser(targetSource).getUsedCharacter
-                tPlayer.addCurrency(0, price)
-                LoadStableContent(targetSource, targetChar)
+    -- get horsemodel from riderid
+    db:execute("SELECT modelname FROM stables WHERE `id` = ?", { rideId }, function(result)
+        if result[1] then
+            local horseModel = result[1].modelname
+            local value = Config.Stables[index]
+            if not value then
+                return print("stable not found: ", index)
             end
-            -- //TODO add currency to seller if disconnected
-        end)
-    else
-        TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipCantAfford .. " " .. Config.Lang.TipOfferStillOn, 4000)
-    end
+
+            local horsePrice = value.horses[horseModel]
+            if not horsePrice then
+                return print("horse not found: ", horseModel)
+            end
+
+            if not accepted then
+                db:execute("UPDATE stables SET status = NULL WHERE `id` = ?", { rideId }, function()
+                    TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferDeclined, 4000)
+                    LoadStableContent(src, id)
+                end)
+            elseif player.money >= horsePrice then
+                db:execute("UPDATE stables SET status = NULL, charidentifier = ? WHERE `id` = ?", { id, rideId }, function()
+                    TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipOfferAccepted:gsub("%{price}", horsePrice), 4000)
+                    LoadStableContent(src, id)
+                    player.removeCurrency(0, horsePrice)
+                    if targetSource then
+                        local tPlayer = VorpCore.getUser(targetSource).getUsedCharacter
+                        tPlayer.addCurrency(0, horsePrice)
+                        LoadStableContent(targetSource, targetChar)
+                    end
+                    -- //TODO add currency to seller if disconnected
+                end)
+            else
+                TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipCantAfford .. " " .. Config.Lang.TipOfferStillOn, 4000)
+            end
+        end
+    end)
 end)
 
-RegisterNetEvent(Events.openInventory, function(rideName)
+local defaultHorse = {}
+RegisterNetEvent(Events.openInventory, function(rideModel, newRide)
     local src = source
-    VorpInv.OpenInv(src, rideName)
+    local user = VorpCore.getUser(src)
+    if not user then return end
+
+    local character = user.getUsedCharacter
+    local charId = character.charIdentifier
+    local id = ("%s_%s"):format(rideModel, charId)
+
+    local isRegistered = exports.vorp_inventory:isCustomInventoryRegistered(id)
+    if not isRegistered then
+        TriggerClientEvent("vorp:TipRight", src, "This inventory is not registered id: " .. id, 4000)
+        return
+    end
+
+    if defaultHorse[src] and not defaultHorse[src] == newRide then
+        return TriggerClientEvent("vorp:TipRight", src, "cant open inventory of a horse that is not your default", 4000)
+    end
+
+    exports.vorp_inventory:openInventory(src, id)
 end)
 
 RegisterNetEvent(Events.setDefault, function(newRide, prevRide)
@@ -267,6 +322,8 @@ RegisterNetEvent(Events.setDefault, function(newRide, prevRide)
         else
             TriggerClientEvent("vorp:TipRight", src, Config.Lang.TipErrorOnUpdate, 4000)
         end
+
+        defaultHorse[src] = newRide -- id of the horse
     end)
 end)
 

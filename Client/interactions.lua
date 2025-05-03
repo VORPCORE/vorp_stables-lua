@@ -186,7 +186,7 @@ function BrushHorse(targetHorse)
     ClearPedWetness(targetHorse)
 end
 
-local function stopFollowing()
+local function stopFollowing(ride)
     Citizen.InvokeNative(0x931B241409216C1F, PlayerPedId(), ride.pedId, false) -- setPedOwnsAnimal if true, the horse will follow the player no matter what, and wint be driveable b/c it will still try to go to player
     horseCurrentlyFollowingPlayer = nil
 end
@@ -219,7 +219,7 @@ function ActionsOnKeyPress()
     end
 
     if IsControlPressed(0, Keys.SPACEBAR) and horseCurrentlyFollowingPlayer ~= nil then
-        stopFollowing()
+        stopFollowing(CurrentHorse)
     end
 
     -- Order flee
@@ -233,9 +233,9 @@ function ActionsOnKeyPress()
 
     if IsControlJustPressed(0, Config.FollowKey) then
         if horseCurrentlyFollowingPlayer ~= nil then
-            stopFollowing()
+            stopFollowing(CurrentHorse)
         else
-            startFollowing()
+            startFollowing(CurrentHorse)
         end
     end
 
@@ -245,10 +245,10 @@ function ActionsOnKeyPress()
     -- Open inventories
     -- //TODO let anyone open if set in Config
     if CurrentHorse ~= nil and CurrentHorse.pedId and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentHorse.pedId)) <= 5.0 and IsControlJustPressed(0, `INPUT_OPEN_SATCHEL_HORSE_MENU`) then
-        TriggerServerEvent(Events.openInventory, CurrentHorse.name)
+        TriggerServerEvent(Events.openInventory, CurrentHorse.model, CurrentHorse.id)
     elseif CurrentCart ~= nil and CurrentCart.pedId and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(CurrentCart.pedId)) <= 5.0 and
         IsControlJustPressed(0, Keys.U) then
-        TriggerServerEvent(Events.openInventory, CurrentCart.name)
+        TriggerServerEvent(Events.openInventory, CurrentCart.model, CurrentCart.id)
     end
 end
 

@@ -18,7 +18,8 @@ shared_scripts {
 }
 client_scripts {
   '@vorp_core/client/dataview.lua',
-  'Client/*.lua' }
+  'Client/*.lua'
+}
 server_script 'Server/main.lua'
 
 files {
@@ -30,7 +31,7 @@ files {
 ui_page 'UI/dist/index.html'
 
 --version check dont touch
-version '1.2'
+version '1.3'
 vorp_checker 'yes'
 vorp_name '^4Resource version Check^3'
 vorp_github 'https://github.com/VORPCORE/vorp_stables-lua'
