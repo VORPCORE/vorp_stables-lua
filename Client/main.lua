@@ -34,16 +34,16 @@ function CheckNearStable()
             stableInRange = nil
         elseif not IsNuiFocused() then
             local GroupName = VarString(10, "LITERAL_STRING", stableInRange.Name)
-            UiPromptSetActiveGroupThisFrame(PromptGroup, GroupName)
+            UiPromptSetActiveGroupThisFrame(PromptGroup, GroupName, 0, 0, 0, 0)
             if UiPromptHasHoldModeCompleted(PromptOpenVendor) then
                 TriggerEvent("vorp:setInstancePlayer", true)
-                SendNUIMessage({
+                SendNUIMessage(json.encode({
                     type = "open",
                     content = {
                         player = Stable,
                         current = stableInRange,
                     }
-                });
+                }));
 
                 SetNuiFocus(true, true)
             end
@@ -83,21 +83,21 @@ function InitPlugin()
 
     SetModelAsNoLongerNeeded(pedModelHash)
 
-    SendNUIMessage({
+    SendNUIMessage(json.encode({
         type = "registerConfig",
         content = Config
-    })
+    }))
 
     local str = Config.Lang.Stable
-    PromptOpenVendor = PromptRegisterBegin()
-    PromptSetControlAction(PromptOpenVendor, 0x760A9C6F)
-    str = CreateVarString(10, "LITERAL_STRING", str)
-    PromptSetText(PromptOpenVendor, str)
-    PromptSetEnabled(PromptOpenVendor, true)
-    PromptSetVisible(PromptOpenVendor, true)
-    PromptSetHoldMode(PromptOpenVendor, true)
-    PromptSetGroup(PromptOpenVendor, PromptGroup)
-    PromptRegisterEnd(PromptOpenVendor)
+    PromptOpenVendor = UiPromptRegisterBegin()
+    UiPromptSetControlAction(PromptOpenVendor, 0x760A9C6F)
+    str = VarString(10, "LITERAL_STRING", str)
+    UiPromptSetText(PromptOpenVendor, str)
+    UiPromptSetEnabled(PromptOpenVendor, true)
+    UiPromptSetVisible(PromptOpenVendor, true)
+    UiPromptSetHoldMode(PromptOpenVendor, 1000)
+    UiPromptSetGroup(PromptOpenVendor, PromptGroup, 0)
+    UiPromptRegisterEnd(PromptOpenVendor)
 end
 
 function Main()
@@ -116,21 +116,24 @@ end)
 
 RegisterNetEvent(Events.onStableLoaded, function(result)
     Stable = PlayerStable:new(result.rides, result.charId, result.availableComps, result.transferedRides)
-    SendNUIMessage({
+
+    local message = json.encode({
         type = "refresh",
         content = {
             player = Stable,
             current = stableInRange
         }
     })
+
+    SendNUIMessage(message)
 end)
 
 RegisterNetEvent("charsLoaded", function(allChars)
     Data.Characters = allChars
-    local message = {
+    local message = json.encode({
         type = "refreshChars",
         content = allChars
-    }
+    })
 
     SendNUIMessage({ message })
 end)
