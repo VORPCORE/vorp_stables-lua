@@ -17,8 +17,8 @@ end)
 
 -- Everytime a DB action is made, this function gets called to sync data on the client with data in the DB
 function LoadStableContent(src, charId, regInvs)
-    -- Retrieve owned rides, and rides transfered to this player
     db:execute("SELECT * FROM stables WHERE `charidentifier`=? OR `status` LIKE '%\"transferTarget\":?,%' OR `status` LIKE '%\"transferTarget\":?}'", { charId, charId, charId }, function(result)
+        -- Retrieve owned rides, and rides transfered to this player
         db:execute("SELECT `complements` FROM horse_complements WHERE `charidentifier`=?", { charId }, function(compsResult)
             local comps
             if (#compsResult == 0) then
@@ -100,8 +100,8 @@ RegisterNetEvent(Events.onBuyRide, function(rideName, rideModel, rideType)
                 else
                     limit = Config.DefaultMaxWeight
                 end
-                id = ("%s_%s"):format(rideModel, id)
-                VorpInv.registerInventory(id, rideName, limit, true, Config.ShareInv[rideType], false)
+                local invid = ("%s_%s"):format(rideModel, id)
+                VorpInv.registerInventory(invid, rideName, limit, true, Config.ShareInv[rideType], false)
                 LoadStableContent(src, id)
             end
         end)
