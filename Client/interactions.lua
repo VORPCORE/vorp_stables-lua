@@ -40,7 +40,7 @@ local function finishHorseSpawn(ride)
     Citizen.InvokeNative(0xB8B6430EAD2D2437, ride.pedId, GetHashKey("PLAYER_HORSE")) -- SetPedPersonality
 
     Citizen.InvokeNative(0xDF93973251FB2CA5, ped, true)                              -- SetPlayerMountStateActive
-    Citizen.InvokeNative(0xe6d4e435b56d5bd0, ped, ride.pedId)                        -- SetPlayerOwnsMount enables tab for weapons and open satchel prompt as well horse name when closer
+   -- Citizen.InvokeNative(0xe6d4e435b56d5bd0, ped, ride.pedId)                        -- SetPlayerOwnsMount enables tab for weapons and open satchel prompt as well horse name when closer
     Citizen.InvokeNative(0xAEB97D84CDF3C00B, ride.pedId, false)                      -- SetAnimalIsWild
 
     -- https://github.com/Halen84/RDR3-Native-Flags-And-Enums/tree/main/ePedScriptConfigFlags
