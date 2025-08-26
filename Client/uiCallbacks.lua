@@ -21,8 +21,13 @@ RegisterNuiCallback("showRide", function(data, callback)
         local rideHash = GetHashKey(data.rideName)
 
         LoadModel(rideHash)
-        DeletePed(RidePreviewRef)
-        DeleteVehicle(RidePreviewRef)
+        if DoesEntityExist(RidePreviewRef) then
+           if not IsEntityAVehicle(RidePreviewRef) then
+                DeletePed(RidePreviewRef)
+            else
+               DeleteVehicle(RidePreviewRef)
+           end
+        end
         Wait(500)
 
         if data.rideType == "horse" then
@@ -122,8 +127,13 @@ RegisterNuiCallback("transferRecieve", function(data, callback)
 end)
 
 RegisterNuiCallback("free", function(data, callback)
-    DeletePed(RidePreviewRef)
-    DeleteVehicle(RidePreviewRef)
+    if DoesEntityExist(RidePreviewRef) then
+       if not IsEntityAVehicle(RidePreviewRef) then
+            DeletePed(RidePreviewRef)
+       else
+            DeleteVehicle(RidePreviewRef)
+       end
+    end
     TriggerServerEvent(Events.onDelete, data.rideId)
 end)
 
@@ -146,8 +156,13 @@ function ReloadCompFromCurrent(previousModel, model)
 end
 
 RegisterNuiCallback("exit", function(data, callback)
-    DeletePed(RidePreviewRef)
-    DeleteVehicle(RidePreviewRef)
+     if DoesEntityExist(RidePreviewRef) then
+       if not IsEntityAVehicle(RidePreviewRef) then
+            DeletePed(RidePreviewRef)
+       else
+            DeleteVehicle(RidePreviewRef)
+       end
+    end
     FreezeEntityPosition(PlayerPedId(), false);
     TriggerEvent("vorp:setInstancePlayer", false);
     DestroyAllCams(true)
