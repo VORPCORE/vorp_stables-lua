@@ -3,6 +3,27 @@ local db = exports.oxmysql
 local VorpCore = exports.vorp_core:GetCore()
 local VorpInv = exports.vorp_inventory:vorp_inventoryApi()
 
+CreateThread(function()
+    -- only register if jobs are actually used
+    if not Config.JobRequired then
+        return
+    end
+
+    local jobs = {}
+    for _, jobName in ipairs({
+        Config.JobForHorseDealer,
+        Config.JobForCartDealer,
+        Config.JobForAllDealer
+    }) do
+        if jobName and jobName ~= "" then
+            jobs[jobName] = jobs[jobName] or {}
+        end
+    end
+
+    if VorpCore.RegisterJobs and next(jobs) then
+        VorpCore.RegisterJobs(jobs, GetCurrentResourceName())
+    end
+end)
 
 RegisterNetEvent(Events.loadStable, function(charid)
     local src = source
