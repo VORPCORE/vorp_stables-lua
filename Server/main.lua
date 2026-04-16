@@ -3,6 +3,33 @@ local db = exports.oxmysql
 local VorpCore = exports.vorp_core:GetCore()
 local VorpInv = exports.vorp_inventory:vorp_inventoryApi()
 
+CreateThread(function()
+    if VorpCore.RegisterJobs then
+        -- only register if jobs are actually used
+        if Config.JobRequired then
+            local jobsData <const> = {}
+            local stableJobs <const> = {
+                Config.JobForHorseDealer,
+                Config.JobForCartDealer,
+                Config.JobForAllDealer
+            }
+
+            for i = 1, #stableJobs do
+                local jobName <const> = stableJobs[i]
+                if jobName and jobName ~= "" then
+                    jobsData[jobName] = {}
+                end
+            end
+
+            if next(jobsData) then
+                VorpCore.RegisterJobs(jobsData, GetCurrentResourceName())
+            end
+        end
+    else
+        -- wait for some time to print this
+        -- print("^1vorp_stables: server: RegisterJobs not found update vorp core to the latest version^7")
+    end
+end)
 
 RegisterNetEvent(Events.loadStable, function(charid)
     local src = source
