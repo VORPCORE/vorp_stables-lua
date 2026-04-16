@@ -5,23 +5,29 @@ local VorpInv = exports.vorp_inventory:vorp_inventoryApi()
 
 CreateThread(function()
     -- only register if jobs are actually used
-    if not Config.JobRequired then
-        return
-    end
+    if Config.JobRequired then
+        local jobsData <const> = {}
+        local stableJobs <const> = {
+            Config.JobForHorseDealer,
+            Config.JobForCartDealer,
+            Config.JobForAllDealer
+        }
 
-    local jobs = {}
-    for _, jobName in ipairs({
-        Config.JobForHorseDealer,
-        Config.JobForCartDealer,
-        Config.JobForAllDealer
-    }) do
-        if jobName and jobName ~= "" then
-            jobs[jobName] = jobs[jobName] or {}
+        for i = 1, #stableJobs do
+            local jobName <const> = stableJobs[i]
+            if jobName and jobName ~= "" then
+                jobsData[jobName] = {}
+            end
         end
-    end
 
-    if VorpCore.RegisterJobs and next(jobs) then
-        VorpCore.RegisterJobs(jobs, GetCurrentResourceName())
+        if VorpCore.RegisterJobs then
+            if next(jobsData) then
+                VorpCore.RegisterJobs(jobsData, GetCurrentResourceName())
+            end
+        else
+            -- wait for some time to print this
+            -- print("^1vorp_stables: server: RegisterJobs not found update vorp core to the latest version^7")
+        end
     end
 end)
 
