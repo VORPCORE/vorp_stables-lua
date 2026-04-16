@@ -8,19 +8,16 @@ CreateThread(function()
         -- only register if jobs are actually used
         if Config.JobRequired then
             local jobsData <const> = {}
-            local stableJobs <const> = {
-                Config.JobForHorseDealer,
-                Config.JobForCartDealer,
-                Config.JobForAllDealer
-            }
-
-            for i = 1, #stableJobs do
-                local jobName <const> = stableJobs[i]
-                if jobName and jobName ~= "" then
-                    jobsData[jobName] = {}
-                end
+            if Config.JobForHorseDealer and Config.JobForHorseDealer ~= "" then 
+                jobsData[Config.JobForHorseDealer] = {},
             end
-
+            if Config.JobForCartDealer and JobForCartDealer ~= "" then 
+                jobsData[Config.JobForCartDealer] = {},
+            end  
+            if Config.JobForAllDealer and JobForAllDealer ~= "" then 
+                jobsData[Config.JobForAllDealer] = {},
+            end  
+            
             if next(jobsData) then
                 VorpCore.RegisterJobs(jobsData, GetCurrentResourceName())
             end
