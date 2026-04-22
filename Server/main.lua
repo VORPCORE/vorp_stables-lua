@@ -11,10 +11,10 @@ CreateThread(function()
             if Config.JobForHorseDealer and Config.JobForHorseDealer ~= "" then 
                 jobsData[Config.JobForHorseDealer] = {},
             end
-            if Config.JobForCartDealer and JobForCartDealer ~= "" then 
+            if Config.JobForCartDealer and Config.JobForCartDealer ~= "" then 
                 jobsData[Config.JobForCartDealer] = {},
             end  
-            if Config.JobForAllDealer and JobForAllDealer ~= "" then 
+            if Config.JobForAllDealer and Config.JobForAllDealer ~= "" then 
                 jobsData[Config.JobForAllDealer] = {},
             end  
             
