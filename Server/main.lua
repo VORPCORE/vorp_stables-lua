@@ -9,13 +9,13 @@ CreateThread(function()
         if Config.JobRequired then
             local jobsData <const> = {}
             if Config.JobForHorseDealer and Config.JobForHorseDealer ~= "" then 
-                jobsData[Config.JobForHorseDealer] = {},
+                jobsData[Config.JobForHorseDealer] = {}
             end
             if Config.JobForCartDealer and Config.JobForCartDealer ~= "" then 
-                jobsData[Config.JobForCartDealer] = {},
+                jobsData[Config.JobForCartDealer] = {}
             end  
             if Config.JobForAllDealer and Config.JobForAllDealer ~= "" then 
-                jobsData[Config.JobForAllDealer] = {},
+                jobsData[Config.JobForAllDealer] = {}
             end  
             
             if next(jobsData) then
